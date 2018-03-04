@@ -6,13 +6,29 @@ using System.Threading.Tasks;
 
 namespace WGP
 {
+    /// <summary>
+    /// The progressvie function is a combination of 2 pow function (first normal, the second inverted) to looks smooth.
+    /// </summary>
     public class ProgressiveFunction : IFunction
     {
+        /// <summary>
+        /// The roughness is the exponent of the pow functions.
+        /// </summary>
+        /// <value>Exponent of the pow function.</value>
         public float Roughness { get; set; }
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="roughness">Roughness of the function. (Optional)</param>
         public ProgressiveFunction(float roughness = 1)
         {
             Roughness = roughness;
         }
+        /// <summary>
+        /// Returns the image of the function.
+        /// </summary>
+        /// <param name="antecedent">Antecedent. Must be between [0,1].</param>
+        /// <returns></returns>
         public float Image(float antecedent)
         {
             if (antecedent <= 0.5)

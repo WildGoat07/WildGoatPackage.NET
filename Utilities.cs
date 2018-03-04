@@ -9,18 +9,45 @@ namespace WGP
 {
     public static class Utilities
     {
+        /// <summary>
+        /// Returns a percentage.
+        /// </summary>
+        /// <param name="value">Reference value.</param>
+        /// <param name="min">Minmal value.</param>
+        /// <param name="max">Maximal value.</param>
+        /// <returns>Percentage.</returns>
         public static float Percent(float value, float min, float max)
         {
             return Math.Max(Math.Min((value - min) / (max - min), 1), 0);
         }
+        /// <summary>
+        /// Returns an interpolation.
+        /// </summary>
+        /// <param name="fct">Referential function.</param>
+        /// <param name="percent">Percent. Must be between [0,1].</param>
+        /// <param name="min">Minimal value.</param>
+        /// <param name="max">Maximal value.</param>
+        /// <returns>Interpolation.</returns>
         public static float Interpolation(this IFunction fct, float percent, float min, float max)
         {
             return fct.Image(percent) * (max - min) + min;
         }
+        /// <summary>
+        /// Returns an interpolation.
+        /// </summary>
+        /// <param name="percent">Percent. Must be between [0,1].</param>
+        /// <param name="min">Minimal value.</param>
+        /// <param name="max">Maximal value.</param>
+        /// <returns>Interpolation.</returns>
         public static float Interpolation(float percent, float min, float max)
         {
             return percent * (max - min) + min;
         }
+        /// <summary>
+        /// Returns an SFML image from a system bitmap image.
+        /// </summary>
+        /// <param name="img">Bitmap image.</param>
+        /// <returns>SFML image.</returns>
         public static Image SystemBitmapAsSFML(System.Drawing.Bitmap img)
         {
             Image result = new Image((uint)img.Width, (uint)img.Height);
@@ -34,10 +61,22 @@ namespace WGP
             }
             return result;
         }
+        /// <summary>
+        /// Test if a FloatRect contains a Vector2f.
+        /// </summary>
+        /// <param name="rect">Box.</param>
+        /// <param name="vec">Vector.</param>
+        /// <returns>True if the vector is inside the box, false if not.</returns>
         public static bool Contains(this FloatRect rect, SFML.System.Vector2f vec)
         {
             return rect.Contains(vec.X, vec.Y);
         }
+        /// <summary>
+        /// Crypt a string.
+        /// </summary>
+        /// <param name="str">String to crypt.</param>
+        /// <param name="key">Key to crypt. (Optional)</param>
+        /// <returns>Crypted string.</returns>
         public static string Crypt(string str, string key = "")
         {
             string result = "";
@@ -54,6 +93,12 @@ namespace WGP
             }
             return result;
         }
+        /// <summary>
+        /// Uncrypt a string.
+        /// </summary>
+        /// <param name="str">String to uncrypt.</param>
+        /// <param name="key">Key to uncrypt. (Optional)</param>
+        /// <returns>Uncrypted string.</returns>
         public static string Uncrypt(string str, string key = "")
         {
             string result = "";
@@ -70,13 +115,36 @@ namespace WGP
             }
             return result;
         }
-        public static float Modulo(float nb, float mod)
+        /// <summary>
+        /// Returns the GCD of two numbers.
+        /// </summary>
+        /// <param name="a">First number.</param>
+        /// <param name="b">Second number.</param>
+        /// <returns>GCD of the two numbers.</returns>
+        public static float GCD(float a, float b)
         {
-            int frac = (int)(nb / mod);
-            nb -= frac * mod;
-            if (nb < 0)
-                nb += mod;
-            return nb;
+            float temp = a % b;
+            if (temp == 0)
+                return b;
+            return GCD(b, temp);
         }
-     }
+        /// <summary>
+        /// Returns the length squared of a vector.
+        /// </summary>
+        /// <param name="vector">Vector.</param>
+        /// <returns>Length squared.</returns>
+        public static float LengthSquared(this SFML.System.Vector2f vector)
+        {
+            return vector.X * vector.X + vector.Y + vector.Y;
+        }
+        /// <summary>
+        /// Returns the length of a vector.
+        /// </summary>
+        /// <param name="vector">Vector.</param>
+        /// <returns>Length.</returns>
+        public static float Length(this SFML.System.Vector2f vector)
+        {
+            return (float)Math.Sqrt(LengthSquared(vector));
+        }
+    }
 }

@@ -4,22 +4,46 @@ using System.Collections.Generic;
 
 namespace WGP
 {
-    public class ChainedList<T>
+    /// <summary>
+    /// A basic linked list.
+    /// </summary>
+    /// <typeparam name="T">Type of the content.</typeparam>
+    public class LinkedList<T> : IEnumerable<T>
     {
         private static long ID = 0;
 
-        internal class Exception : System.Exception
+        internal class ElementException : System.Exception
         {
-            public Exception(string str = "") : base(str) { }
+            public ElementException(string str = "") : base(str) { }
         }
 
+
+        /// <summary>
+        /// An element of the linked list.
+        /// </summary>
+        /// <typeparam name="U">Type of the element.</typeparam>
         public class Element<U>
         {
+            /// <summary>
+            /// The value.
+            /// </summary>
             public U Value;
+            /// <summary>
+            /// Returns the previous element in the linked list. if the current element is at the beginning, it will return null.
+            /// </summary>
+            /// <value>Previous element.</value>
             public Element<U> Previous { get; internal set; }
+            /// <summary>
+            /// Returns the next element in the linked list. if the current element is at the end, it will return null.
+            /// </summary>
+            /// <value>Next element.</value>
             public Element<U> Next { get; internal set; }
             internal long Id { get; set; }
 
+            /// <summary>
+            /// Implicit cast to the value.
+            /// </summary>
+            /// <param name="v">Element to cast.</param>
             public static implicit operator U(Element<U> v)
             {
                 return v.Value;
@@ -32,15 +56,33 @@ namespace WGP
                 Next = null;
                 ID = -1;
             }
+
+            public override string ToString()
+            {
+                return Value.ToString();
+            }
         }
 
-   
+        /// <summary>
+        /// First element of the list. Is null if the list is empty.
+        /// </summary>
+        /// <value>First element.</value>
         public Element<T> First { get; private set; }
+        /// <summary>
+        /// Last element of the list. Is null if the list is empty.
+        /// </summary>
+        /// <value>Last element.</value>
         public Element<T> Last { get; private set; }
         private readonly long InternID;
+        /// <summary>
+        /// Number of elements in the list.
+        /// </summary>
+        /// <value>Size of the list.</value>
         public uint Count { get; private set; }
-
-        public ChainedList()
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public LinkedList()
         {
             InternID = ID;
             ID++;
@@ -48,25 +90,60 @@ namespace WGP
             First = null;
             Last = null;
         }
-
-        private ChainedList(long id) : this()
+        private LinkedList(long id) : this()
         {
             ID--;
             InternID = id;
         }
-
-        public ChainedList(Element<T> beg, Element<T> end) : this()
+        /// <summary>
+        /// Constructor. Copy the elements from a range.
+        /// </summary>
+        /// <param name="beg">First element of the range.</param>
+        /// <param name="end">Last element of the range.</param>
+        /// <exception cref="ElementException">Thrown when <paramref name="beg"/> and <paramref name="end"/> doesn't belong to the same list.</exception>
+        /// <exception cref="ElementException">Thrown when <paramref name="end"/> doesn't follow <paramref name="beg"/>.</exception>
+        public LinkedList(Element<T> beg, Element<T> end) : this()
         {
             Insert(null, beg, end);
         }
-
-        public ChainedList(ChainedList<T> copy) : this(copy.First, copy.Last) { }
-
-        public void Add(T v)
+        /// <summary>
+        /// Constructor. Copy the elements from an array.
+        /// </summary>
+        /// <param name="array">Array to copy.</param>
+        public LinkedList(T[] array) : this()
         {
-            Insert(null, v);
+            Insert(null, array);
         }
-
+        /// <summary>
+        /// Constructor. Copy the elements from an array.
+        /// </summary>
+        /// <param name="array">Array to add.</param>
+        /// <param name="pos">Position of the first element of the range in the array.</param>
+        /// <param name="count">Number of elements to add.</param>
+        /// <exception cref="IndexOutOfRangeException">Thrown when the range overflows from the array.</exception>
+        public LinkedList(T[] array, uint pos, uint count)
+        {
+            Insert(null, array, pos, count);
+        }
+        /// <summary>
+        /// Copy Constructor.
+        /// </summary>
+        /// <param name="copy">List to copy.</param>
+        public LinkedList(LinkedList<T> copy) : this(copy.First, copy.Last) { }
+        /// <summary>
+        /// Adds a new value at the end of the list.
+        /// </summary>
+        /// <param name="value">Value to add.</param>
+        public void Add(T value)
+        {
+            Insert(null, value);
+        }
+        /// <summary>
+        /// Inserts a new value in the list.
+        /// </summary>
+        /// <param name="at">Position of the new element, or null to add at the end of the list.</param>
+        /// <param name="value">Value to add.</param>
+        /// <exception cref="ElementException">Thrown when <paramref name="at"/> doesn't belong to the list.</exception>
         public void Insert(Element<T> at, T value)
         {
             Element<T> tmp = new Element<T>(value);
@@ -83,7 +160,7 @@ namespace WGP
                     at.Previous = tmp;
                 }
                 else
-                    throw new Exception("L'élément fourni n'appartient pas à la liste.");
+                    throw new ElementException("The element doesn't belong to the list.");
             }
             else
             {
@@ -97,11 +174,19 @@ namespace WGP
             if (at == First)
                 First = tmp;
         }
-
+        /// <summary>
+        /// Insert a range in the list.
+        /// </summary>
+        /// <param name="at">Position of the range in the list, or null to add at the end.</param>
+        /// <param name="beg">First element of the range.</param>
+        /// <param name="end">Last element of the range.</param>
+        /// <exception cref="ElementException">Thrown when <paramref name="at"/> doesn't belong to the list.</exception>
+        /// <exception cref="ElementException">Thrown when <paramref name="beg"/> and <paramref name="end"/> doesn't belong to the same list.</exception>
+        /// <exception cref="ElementException">Thrown when <paramref name="end"/> doesn't follow <paramref name="beg"/>.</exception>
         public void Insert(Element<T> at, Element<T> beg, Element<T> end)
         {
             if (beg.Id != end.Id)
-                throw new Exception("Les éléments fournis n'appartiennent pas à la même liste.");
+                throw new ElementException("The elements beg and end doesn't belong to the same list.");
             Element<T> tmp = beg;
             while (tmp != null)
             {
@@ -110,10 +195,45 @@ namespace WGP
                     return;
                 tmp = tmp.Next;
                 if (tmp == null)
-                    throw new Exception("L'élément end ne suis pas l'itérateur beg.");
+                    throw new ElementException("The element end doesn't follow beg.");
             }
         }
-
+        /// <summary>
+        /// Inserts an array in the list.
+        /// </summary>
+        /// <param name="at">Position of the new element, or null to add at the end of the list.</param>
+        /// <param name="array">array to add.</param>
+        /// <exception cref="ElementException">Thrown when <paramref name="at"/> doesn't belong to the list.</exception>
+        public void Insert(Element<T> at, T[] array)
+        {
+            foreach (var item in array)
+            {
+                Insert(at, item);
+            }
+        }
+        /// <summary>
+        /// Inserts an array in the list.
+        /// </summary>
+        /// <param name="at">Position of the new element, or null to add at the end of the list.</param>
+        /// <param name="array">Array to add.</param>
+        /// <param name="pos">Position of the first element of the range in the array.</param>
+        /// <param name="count">Number of elements to add.</param>
+        /// <exception cref="ElementException">Thrown when <paramref name="at"/> doesn't belong to the list.</exception>
+        /// <exception cref="IndexOutOfRangeException">Thrown when the range overflows from the array.</exception>
+        public void Insert(Element<T> at, T[] array, uint pos, uint count)
+        {
+            if (count + pos > array.Length)
+                throw new IndexOutOfRangeException("The range overflows from the array.");
+            for (int i = (int)pos;i<count + pos;i++)
+            {
+                Insert(at, array[i]);
+            }
+        }
+        /// <summary>
+        /// Removes an element of the list.
+        /// </summary>
+        /// <param name="at">Element to remove.</param>
+        /// <exception cref="ElementException">Thrown when <paramref name="at"/> doesn't belong to the list.</exception>
         public void Remove(Element<T> at)
         {
             if (at.Id == InternID)
@@ -134,12 +254,19 @@ namespace WGP
                 }
             }
             else
-                throw new Exception("Les éléments fournis n'appartient pas à la liste.");
+                throw new ElementException("The element doesn't belong to the list.");
         }
+        /// <summary>
+        /// Removes a range of elements from the list.
+        /// </summary>
+        /// <param name="beg">First element of the range.</param>
+        /// <param name="end">Last element of the range.</param>
+        /// <exception cref="ElementException">Thrown when <paramref name="beg"/> or <paramref name="end"/> doesn't belong to the list.</exception>
+        /// <exception cref="ElementException">Thrown when <paramref name="end"/> doesn't follow <paramref name="beg"/>.</exception>
         public void Remove(Element<T> beg, Element<T> end)
         {
             if (beg.Id != InternID || end.Id != InternID)
-                throw new Exception("Les éléments n'appartiennent pas à la liste.");
+                throw new ElementException("The elements beg and end doesn't belong to the same list.");
 
             List<Element<T>> list = new List<Element<T>>();
             Element<T> tmp = beg;
@@ -148,7 +275,7 @@ namespace WGP
                 if (tmp != null)
                     list.Add(tmp);
                 else
-                    throw new IndexOutOfRangeException("L'élément end ne suis pas l'itérateur beg.");
+                    throw new IndexOutOfRangeException("The element end doesn't follow beg.");
                 tmp = tmp.Next;
             }
             list.Add(tmp);
@@ -157,12 +284,19 @@ namespace WGP
                 Remove(item);
             }
         }
+        /// <summary>
+        /// Remove all elements.
+        /// </summary>
         public void Clear()
         {
             First = null;
             Last = null;
             Count = 0;
         }
+        /// <summary>
+        /// Returns a copy of the list as an array.
+        /// </summary>
+        /// <returns>Copy of the list.</returns>
         public T[] ToArray()
         {
             T[] result = new T[Count];
@@ -174,10 +308,18 @@ namespace WGP
             }
             return result;
         }
+        /// <summary>
+        /// Returns a copy of a range of elements from the list as an array.
+        /// </summary>
+        /// <param name="beg">First element of the range.</param>
+        /// <param name="end">Last element of the range.</param>
+        /// <returns>Copy of the range of elements from the list.</returns>
+        /// <exception cref="ElementException">Thrown when <paramref name="beg"/> or <paramref name="end"/> doesn't belong to the list.</exception>
+        /// <exception cref="ElementException">Thrown when <paramref name="end"/> doesn't follow <paramref name="beg"/>.</exception>
         public T[] ToArray(Element<T> beg, Element<T> end)
         {
             if (beg.Id != InternID || end.Id != InternID)
-                throw new Exception("Les itérateurs n'appartiennent pas à la liste.");
+                throw new ElementException("The elements beg and end doesn't belong to the same list.");
 
             List<Element<T>> list = new List<Element<T>>();
             Element<T> tmp = beg;
@@ -186,7 +328,7 @@ namespace WGP
                 if (tmp != null)
                     list.Add(tmp);
                 else
-                    throw new IndexOutOfRangeException("L'élément end ne suis pas l'itérateur beg.");
+                    throw new IndexOutOfRangeException("The element end doesn't follow beg.");
                 tmp = tmp.Next;
             }
             list.Add(tmp);
@@ -195,13 +337,17 @@ namespace WGP
                 result[i] = list[i];
             return result;
         }
+        /// <summary>
+        /// Sorts the list.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">Thrown if the type T isn't comparable.</exception>
         public void Sort()
         {
             if (Count > 1)
             {
                 if (First.Value is IComparable)
                 {
-                    ChainedList<T> buffer = new ChainedList<T>(InternID);
+                    LinkedList<T> buffer = new LinkedList<T>(InternID);
                     Element<T> min;
                     buffer.Add(First);
                     min = buffer.First;
@@ -227,8 +373,32 @@ namespace WGP
                     Last = buffer.Last;
                 }
                 else
-                    throw new System.Exception("Le type " + First.Value.GetType() + "n'est pas comparable.");
+                    throw new InvalidOperationException("The type " + First.Value.GetType() + " isn't comparable.");
             }
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            for (var item = First; item != null; item = item.Next)
+                yield return item.Value;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public override string ToString()
+        {
+            string result = "[ ";
+            for (var it = First; it != null; it = it.Next)
+            {
+                result += it;
+                if (it.Next != null)
+                    result += ", ";
+            }
+            result += " ]";
+            return result;
         }
     }
 }
