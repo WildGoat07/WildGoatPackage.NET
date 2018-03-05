@@ -11,6 +11,15 @@ namespace WGP
     /// </summary>
     public struct Angle : IComparable, IComparable<Angle>, IEquatable<Angle>
     {
+        /// <summary>
+        /// Angle corresponing to 0 degrees or 0 radians.
+        /// </summary>
+        static public Angle Zero { get => FromRadians(0); }
+        /// <summary>
+        /// Angle corresponing to 360 degrees or 2PI radians.
+        /// </summary>
+        static public Angle Loop { get => FromRadians(2 * (float)Math.PI); }
+
         private float radian;
         /// <summary>
         /// Angle in degrees.
@@ -145,6 +154,58 @@ namespace WGP
         public override string ToString()
         {
             return "{ [Radians:" + Radian + "] , [Degrees:" + Degree + "] }";
+        }
+        static public Angle operator +(Angle left, Angle right)
+        {
+            return FromRadians(left.radian + right.radian);
+        }
+        static public Angle operator -(Angle left, Angle right)
+        {
+            return FromRadians(left.radian - right.radian);
+        }
+        static public Angle operator -(Angle angle)
+        {
+            return FromRadians(-angle.radian);
+        }
+        static public Angle operator *(Angle angle, float value)
+        {
+            return FromRadians(angle.radian * value);
+        }
+        static public Angle operator /(Angle angle, float value)
+        {
+            return FromRadians(angle.radian / value);
+        }
+        static public Angle operator *(float value, Angle angle)
+        {
+            return FromRadians(angle.radian * value);
+        }
+        static public Angle operator /(float value, Angle angle)
+        {
+            return FromRadians(value / angle.radian);
+        }
+        static public bool operator <(Angle left, Angle right)
+        {
+            return left.CompareTo(right) < 0;
+        }
+        static public bool operator >(Angle left, Angle right)
+        {
+            return left.CompareTo(right) > 0;
+        }
+        static public bool operator ==(Angle left, Angle right)
+        {
+            return left.Equals(right);
+        }
+        static public bool operator !=(Angle left, Angle right)
+        {
+            return !left.Equals(right);
+        }
+        static public bool operator <=(Angle left, Angle right)
+        {
+            return left.CompareTo(right) <= 0;
+        }
+        static public bool operator >=(Angle left, Angle right)
+        {
+            return left.CompareTo(right) >= 0;
         }
     }
 }

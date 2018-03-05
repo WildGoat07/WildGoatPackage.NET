@@ -165,7 +165,7 @@ namespace WGP
         /// <returns>Angle.</returns>
         static public Angle Angle(this SFML.System.Vector2f vector)
         {
-            return WGP.Angle.FromRadians((float)Math.Atan2(vector.Y, vector.X));
+            return WGP.Angle.FromRadians((float)System.Math.Atan2(vector.Y, vector.X));
         }
         /// <summary>
         /// Returns the angle of the vector.
