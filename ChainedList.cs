@@ -27,7 +27,8 @@ namespace WGP
             /// <summary>
             /// The value.
             /// </summary>
-            public U Value;
+            /// <value>The value.</value>
+            public U Value { get; set; }
             /// <summary>
             /// Returns the previous element in the linked list. if the current element is at the beginning, it will return null.
             /// </summary>

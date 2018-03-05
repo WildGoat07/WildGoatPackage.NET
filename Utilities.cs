@@ -135,7 +135,7 @@ namespace WGP
         /// <returns>Length squared.</returns>
         public static float LengthSquared(this SFML.System.Vector2f vector)
         {
-            return vector.X * vector.X + vector.Y + vector.Y;
+            return vector.X * vector.X + vector.Y * vector.Y;
         }
         /// <summary>
         /// Returns the length of a vector.
@@ -145,6 +145,37 @@ namespace WGP
         public static float Length(this SFML.System.Vector2f vector)
         {
             return (float)Math.Sqrt(LengthSquared(vector));
+        }
+        /// <summary>
+        /// Normalize a vector.
+        /// </summary>
+        /// <param name="vector">Vector to normalize.</param>
+        /// <returns>Normalized vector.</returns>
+        public static SFML.System.Vector2f Normalize(this SFML.System.Vector2f vector)
+        {
+            float l = vector.Length();
+            if (l == 0)
+                return vector;
+            return vector / l;
+        }
+        /// <summary>
+        /// Returns the angle of the vector.
+        /// </summary>
+        /// <param name="vector">Vector.</param>
+        /// <returns>Angle.</returns>
+        static public Angle Angle(this SFML.System.Vector2f vector)
+        {
+            return WGP.Angle.FromRadians((float)Math.Atan2(vector.Y, vector.X));
+        }
+        /// <summary>
+        /// Returns the angle of the vector.
+        /// </summary>
+        /// <param name="x">X component of a vector.</param>
+        /// <param name="y">Y component of a vector.</param>
+        /// <returns>Angle.</returns>
+        static public Angle Angle(float x, float y)
+        {
+            return Angle(new SFML.System.Vector2f(x, y));
         }
     }
 }
