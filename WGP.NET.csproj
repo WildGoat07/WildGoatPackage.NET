@@ -84,11 +84,13 @@
     <Compile Include="Angle.cs" />
     <Compile Include="HSVColor.cs" />
     <Compile Include="IFunction.cs" />
+    <Compile Include="Line.cs" />
     <Compile Include="LinearFunction.cs" />
     <Compile Include="ChainedList.cs" />
     <Compile Include="PowFunction.cs" />
     <Compile Include="ProgressiveFunction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Segment.cs" />
     <Compile Include="Utilities.cs" />
   </ItemGroup>
   <ItemGroup>

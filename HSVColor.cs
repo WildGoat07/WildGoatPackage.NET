@@ -24,7 +24,7 @@ namespace WGP
         public float H
         {
             get => hue;
-            set => hue = value % 360;
+            set => hue = ((value % 360) + 360) % 360;
         }
         /// <summary>
         /// Saturation of the color.
@@ -33,7 +33,7 @@ namespace WGP
         public float S
         {
             get => saturation;
-            set => saturation = Math.Max(0, Math.Min(1, value));
+            set => saturation = Utilities.Max(0, Utilities.Min(1, value));
         }
         /// <summary>
         /// Value of the color.
@@ -42,7 +42,7 @@ namespace WGP
         public float V
         {
             get => value;
-            set => this.value = Math.Max(0, Math.Min(1, value));
+            set => this.value = Utilities.Max(0, Utilities.Min(1, value));
         }
         /// <summary>
         /// Alpha channel of the color.
@@ -84,8 +84,8 @@ namespace WGP
             r = color.R / 255f;
             g = color.G / 255f;
             b = color.B / 255f;
-            min = Math.Min(r, Math.Min(g, b));
-            max = Math.Max(r, Math.Max(g, b));
+            min = Utilities.Min(r, Utilities.Min(g, b));
+            max = Utilities.Max(r, Utilities.Max(g, b));
             value = max;
             delta = max - min;
             if (delta < .0001f)

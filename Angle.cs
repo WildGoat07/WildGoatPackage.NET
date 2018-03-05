@@ -86,7 +86,7 @@ namespace WGP
         /// <summary>
         /// Returns the cosine of the angle.
         /// </summary>
-        /// <returns>Cosinus.</returns>
+        /// <returns>Cosine.</returns>
         public float Cos()
         {
             return (float)Math.Cos(radian);
@@ -110,7 +110,7 @@ namespace WGP
         /// <summary>
         /// Returns the hyperbolic cosine of the angle.
         /// </summary>
-        /// <returns>Cosinus.</returns>
+        /// <returns>Hyperbolic cosine.</returns>
         public float Cosh()
         {
             return (float)Math.Cosh(radian);
@@ -118,7 +118,7 @@ namespace WGP
         /// <summary>
         /// Returns the hyperbolic sinus of the angle.
         /// </summary>
-        /// <returns>Sinus.</returns>
+        /// <returns>Hyperbolic sinus.</returns>
         public float Sinh()
         {
             return (float)Math.Sinh(radian);
@@ -126,7 +126,7 @@ namespace WGP
         /// <summary>
         /// Returns the hyperbolic tangent of the angle.
         /// </summary>
-        /// <returns>Tangent.</returns>
+        /// <returns>Hyperbolic tangent.</returns>
         public float Tanh()
         {
             return (float)Math.Tanh(radian);
@@ -182,6 +182,10 @@ namespace WGP
         static public Angle operator /(float value, Angle angle)
         {
             return FromRadians(value / angle.radian);
+        }
+        static public float operator /(Angle left, Angle right)
+        {
+            return left.radian / right.radian;
         }
         static public bool operator <(Angle left, Angle right)
         {

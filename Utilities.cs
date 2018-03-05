@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SFML.Graphics;
+using SFML.System;
 
 namespace WGP
 {
@@ -133,7 +134,7 @@ namespace WGP
         /// </summary>
         /// <param name="vector">Vector.</param>
         /// <returns>Length squared.</returns>
-        public static float LengthSquared(this SFML.System.Vector2f vector)
+        public static float LengthSquared(this Vector2f vector)
         {
             return vector.X * vector.X + vector.Y * vector.Y;
         }
@@ -142,7 +143,7 @@ namespace WGP
         /// </summary>
         /// <param name="vector">Vector.</param>
         /// <returns>Length.</returns>
-        public static float Length(this SFML.System.Vector2f vector)
+        public static float Length(this Vector2f vector)
         {
             return (float)Math.Sqrt(LengthSquared(vector));
         }
@@ -151,11 +152,11 @@ namespace WGP
         /// </summary>
         /// <param name="vector">Vector to normalize.</param>
         /// <returns>Normalized vector.</returns>
-        public static SFML.System.Vector2f Normalize(this SFML.System.Vector2f vector)
+        public static Vector2f Normalize(this Vector2f vector)
         {
             float l = vector.Length();
             if (l == 0)
-                return vector;
+                return default(Vector2f);
             return vector / l;
         }
         /// <summary>
@@ -163,9 +164,9 @@ namespace WGP
         /// </summary>
         /// <param name="vector">Vector.</param>
         /// <returns>Angle.</returns>
-        static public Angle Angle(this SFML.System.Vector2f vector)
+        static public Angle Angle(this Vector2f vector)
         {
-            return WGP.Angle.FromRadians((float)System.Math.Atan2(vector.Y, vector.X));
+            return WGP.Angle.FromRadians((float)Math.Atan2(vector.Y, vector.X));
         }
         /// <summary>
         /// Returns the angle of the vector.
@@ -175,7 +176,113 @@ namespace WGP
         /// <returns>Angle.</returns>
         static public Angle Angle(float x, float y)
         {
-            return Angle(new SFML.System.Vector2f(x, y));
+            return Angle(new Vector2f(x, y));
+        }
+        /// <summary>
+        /// Returns the intersection between two lines.
+        /// </summary>
+        /// <param name="line1">First line.</param>
+        /// <param name="line2">Second line.</param>
+        /// <returns>Intersection of the lines.</returns>
+        /// <remarks>The returned value is set to default if there is no collision.</remarks>
+        static public Vector2f Intersection(this Line line1, Line line2)
+        {
+            if (!line1.Collision(line2))
+                return default(Vector2f);
+            float t = (line2.Position - line1.Position).CrossProduct(line2.Direction) / line1.Direction.CrossProduct(line2.Direction);
+            return line1.GetPoint(t);
+        }
+        /// <summary>
+        /// Test the collision between two lines. Test also the collision if one or both of the lines are segments.
+        /// </summary>
+        /// <param name="line1">First line.</param>
+        /// <param name="line2">econd line.</param>
+        /// <returns>True if there is a collision.</returns>
+        static public bool Collision(this Line line1, Line line2)
+        {
+            if (line1.Direction.CrossProduct(line2.Direction) == 0 &&
+                (line2.Position - line1.Position).CrossProduct(line2.Direction) == 0)
+                return false;
+            if (line1 is Segment && line2 is Segment)
+            {
+                float t1 = (line2.Position - line1.Position).CrossProduct(line2.Direction) / line1.Direction.CrossProduct(line2.Direction);
+                float t2 = (line2.Position - line1.Position).CrossProduct(line1.Direction) / line1.Direction.CrossProduct(line2.Direction);
+                if (t1.IsInRange(0f, ((Segment)line1).Length) && t2.IsInRange(0, ((Segment)line2).Length))
+                    return true;
+                else
+                    return false;
+            }
+            else if (line1 is Segment)
+            {
+                float t1 = (line2.Position - line1.Position).CrossProduct(line2.Direction) / line1.Direction.CrossProduct(line2.Direction);
+                if (t1.IsInRange(0f, ((Segment)line1).Length))
+                    return true;
+                else
+                    return false;
+            }
+            else if (line2 is Segment)
+            {
+                float t2 = (line2.Position - line1.Position).CrossProduct(line1.Direction) / line1.Direction.CrossProduct(line2.Direction);
+                if (t2.IsInRange(0f, ((Segment)line2).Length))
+                    return true;
+                else
+                    return false;
+            }
+            else
+                return true;
+        }
+        /// <summary>
+        /// Returns the cross product of two vectors.
+        /// </summary>
+        /// <param name="vec1">First vector.</param>
+        /// <param name="vec2">Second vector.</param>
+        /// <returns>Cross product.</returns>
+        static public float CrossProduct(this Vector2f vec1, Vector2f vec2)
+        {
+            return vec1.X * vec2.Y - vec1.Y * vec2.X;
+        }
+        /// <summary>
+        /// Tests if <paramref name="value"/> is in the [<paramref name="min"/> , <paramref name="max"/>] range. <paramref name="min"/> and <paramref name="max"/> are included in the range.
+        /// </summary>
+        /// <typeparam name="T">Type of the variable. Must be comparable.</typeparam>
+        /// <param name="value">Value to compare.</param>
+        /// <param name="min">Minimum value of the range.</param>
+        /// <param name="max">Maximum value of the range.</param>
+        /// <returns>True if <paramref name="value"/> is in the range.</returns>
+        static public bool IsInRange<T>(this T value, T min, T max) where T : IComparable
+        {
+            if (value.CompareTo(min) >= 0 && value.CompareTo(max) <= 0)
+                return true;
+            else
+                return false;
+        }
+        /// <summary>
+        /// Returns the smallest value.
+        /// </summary>
+        /// <typeparam name="T">Type of the variables. Must be comparable.</typeparam>
+        /// <param name="left">First value.</param>
+        /// <param name="right">Second value.</param>
+        /// <returns>Minimum value.</returns>
+        static public T Min<T>(T left, T right) where T : IComparable
+        {
+            if (left.CompareTo(right) <= 0)
+                return left;
+            else
+                return right;
+        }
+        /// <summary>
+        /// Returns the biggest value.
+        /// </summary>
+        /// <typeparam name="T">Type of the variables. Must be comparable.</typeparam>
+        /// <param name="left">First value.</param>
+        /// <param name="right">Second value.</param>
+        /// <returns>Maximum value.</returns>
+        static public T Max<T>(T left, T right) where T : IComparable
+        {
+            if (left.CompareTo(right) >= 0)
+                return left;
+            else
+                return right;
         }
     }
 }
