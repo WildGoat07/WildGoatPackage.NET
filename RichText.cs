@@ -151,7 +151,6 @@ namespace WGP
                     tempText.Color = part.Color;
                     tempText.DisplayedString = word;
                     tempText.Style = part.Style;
-                    Console.WriteLine(part.Style);
                     tempText.Font = Font;
                     tempText.CharacterSize = CharacterSize;
                     if (MaxWidth <= 0)
