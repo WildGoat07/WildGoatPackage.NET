@@ -87,10 +87,10 @@
     <Compile Include="IFunction.cs" />
     <Compile Include="Line.cs" />
     <Compile Include="LinearFunction.cs" />
-    <Compile Include="LinkedList.cs" />
     <Compile Include="PowFunction.cs" />
     <Compile Include="ProgressiveFunction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RichText.cs" />
     <Compile Include="Segment.cs" />
     <Compile Include="Utilities.cs" />
   </ItemGroup>
