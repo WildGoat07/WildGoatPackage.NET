@@ -186,11 +186,11 @@ namespace WGP
         /// <returns>Global bounding box.</returns>
         public FloatRect GetLocalBounds()
         {
-            FloatRect bounds = new FloatRect();
+            FloatRect bounds = new FloatRect(0, 0, 0, 0);
             foreach (var box in Hitboxes)
             {
                 bounds.Width = Utilities.Max(bounds.Width, box.Box.Width + box.Box.Left);
-                bounds.Height = Utilities.Max(bounds.Width, box.Box.Top + box.Box.Height);
+                bounds.Height = Utilities.Max(bounds.Height, box.Box.Top + box.Box.Height);
             }
             return bounds;
         }
