@@ -202,5 +202,14 @@ namespace WGP
         {
             return Transform.TransformRect(GetLocalBounds());
         }
+        /// <summary>
+        /// Empties the stored parts.
+        /// </summary>
+        public void Clear()
+        {
+            Buffer.Clear();
+            Hitboxes.Clear();
+            Parts.Clear();
+        }
     }
 }
