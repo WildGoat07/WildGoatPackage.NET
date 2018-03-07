@@ -181,5 +181,27 @@ namespace WGP
                 }
             }
         }
+        /// <summary>
+        /// Returns the transformed bounding box.
+        /// </summary>
+        /// <returns>Global bounding box.</returns>
+        public FloatRect GetLocalBounds()
+        {
+            FloatRect bounds = new FloatRect();
+            foreach (var box in Hitboxes)
+            {
+                bounds.Width = Utilities.Max(bounds.Width, box.Box.Width + box.Box.Left);
+                bounds.Height = Utilities.Max(bounds.Width, box.Box.Top + box.Box.Height);
+            }
+            return bounds;
+        }
+        /// <summary>
+        /// Returns the bounding box (without transformations).
+        /// </summary>
+        /// <returns>Bouding box.</returns>
+        public FloatRect GetGlobalBounds()
+        {
+            return Transform.TransformRect(GetLocalBounds());
+        }
     }
 }
