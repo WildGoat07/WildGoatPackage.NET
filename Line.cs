@@ -30,6 +30,15 @@ namespace WGP
         /// </summary>
         public Line() { }
         /// <summary>
+        /// Copy constructor.
+        /// </summary>
+        /// <param name="copy">Line to copy.</param>
+        public Line(Line copy) : this()
+        {
+            Position = copy.Position;
+            direction = copy.Direction;
+        }
+        /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="pt1">First point of the line.</param>

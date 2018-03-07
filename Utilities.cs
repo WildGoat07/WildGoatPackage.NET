@@ -24,18 +24,6 @@ namespace WGP
         /// <summary>
         /// Returns an interpolation.
         /// </summary>
-        /// <param name="fct">Referential function.</param>
-        /// <param name="percent">Percent. Must be between [0,1].</param>
-        /// <param name="min">Minimal value.</param>
-        /// <param name="max">Maximal value.</param>
-        /// <returns>Interpolation.</returns>
-        public static float Interpolation(this IFunction fct, float percent, float min, float max)
-        {
-            return fct.Image(percent) * (max - min) + min;
-        }
-        /// <summary>
-        /// Returns an interpolation.
-        /// </summary>
         /// <param name="percent">Percent. Must be between [0,1].</param>
         /// <param name="min">Minimal value.</param>
         /// <param name="max">Maximal value.</param>
@@ -61,16 +49,6 @@ namespace WGP
                 }
             }
             return result;
-        }
-        /// <summary>
-        /// Test if a FloatRect contains a Vector2f.
-        /// </summary>
-        /// <param name="rect">Box.</param>
-        /// <param name="vec">Vector.</param>
-        /// <returns>True if the vector is inside the box, false if not.</returns>
-        public static bool Contains(this FloatRect rect, SFML.System.Vector2f vec)
-        {
-            return rect.Contains(vec.X, vec.Y);
         }
         /// <summary>
         /// Crypt a string.
@@ -130,6 +108,59 @@ namespace WGP
             return GCD(b, temp);
         }
         /// <summary>
+        /// Returns the smallest value.
+        /// </summary>
+        /// <typeparam name="T">Type of the variables. Must be comparable.</typeparam>
+        /// <param name="left">First value.</param>
+        /// <param name="right">Second value.</param>
+        /// <returns>Minimum value.</returns>
+        static public T Min<T>(T left, T right) where T : IComparable
+        {
+            if (left.CompareTo(right) <= 0)
+                return left;
+            else
+                return right;
+        }
+        /// <summary>
+        /// Returns the biggest value.
+        /// </summary>
+        /// <typeparam name="T">Type of the variables. Must be comparable.</typeparam>
+        /// <param name="left">First value.</param>
+        /// <param name="right">Second value.</param>
+        /// <returns>Maximum value.</returns>
+        static public T Max<T>(T left, T right) where T : IComparable
+        {
+            if (left.CompareTo(right) >= 0)
+                return left;
+            else
+                return right;
+        }
+    }
+    static public class Extensions
+    {
+        /// <summary>
+        /// Returns an interpolation.
+        /// </summary>
+        /// <param name="fct">Referential function.</param>
+        /// <param name="percent">Percent. Must be between [0,1].</param>
+        /// <param name="min">Minimal value.</param>
+        /// <param name="max">Maximal value.</param>
+        /// <returns>Interpolation.</returns>
+        public static float Interpolation(this IFunction fct, float percent, float min, float max)
+        {
+            return fct.Image(percent) * (max - min) + min;
+        }
+        /// <summary>
+        /// Test if a FloatRect contains a Vector2f.
+        /// </summary>
+        /// <param name="rect">Box.</param>
+        /// <param name="vec">Vector.</param>
+        /// <returns>True if the vector is inside the box, false if not.</returns>
+        public static bool Contains(this FloatRect rect, SFML.System.Vector2f vec)
+        {
+            return rect.Contains(vec.X, vec.Y);
+        }
+        /// <summary>
         /// Returns the length squared of a vector.
         /// </summary>
         /// <param name="vector">Vector.</param>
@@ -143,9 +174,29 @@ namespace WGP
         /// </summary>
         /// <param name="vector">Vector.</param>
         /// <returns>Length.</returns>
+        [Obsolete("Use GetLength() instead.")]
         public static float Length(this Vector2f vector)
         {
             return (float)Math.Sqrt(LengthSquared(vector));
+        }
+        /// <summary>
+        /// Returns the length of a vector.
+        /// </summary>
+        /// <param name="vector">Vector.</param>
+        /// <returns>Length.</returns>
+        public static float GetLength(this Vector2f vector)
+        {
+            return (float)Math.Sqrt(LengthSquared(vector));
+        }
+        /// <summary>
+        /// Returns the length of a vector.
+        /// </summary>
+        /// <param name="vector">Vector.</param>
+        /// <param name="length">Length of the vector.</param>
+        /// <returns>Length.</returns>
+        public static void SetLength(ref this Vector2f vector, float length)
+        {
+            vector = vector.GetAngle().GenerateVector(length);
         }
         /// <summary>
         /// Normalize a vector.
@@ -154,9 +205,9 @@ namespace WGP
         /// <returns>Normalized vector.</returns>
         public static Vector2f Normalize(this Vector2f vector)
         {
-            float l = vector.Length();
+            float l = vector.GetLength();
             if (l == 0)
-                return default(Vector2f);
+                return default;
             return vector / l;
         }
         /// <summary>
@@ -164,6 +215,7 @@ namespace WGP
         /// </summary>
         /// <param name="vector">Vector.</param>
         /// <returns>Angle.</returns>
+        [Obsolete("Use GetAngle() instead.")]
         static public Angle Angle(this Vector2f vector)
         {
             return WGP.Angle.FromRadians((float)Math.Atan2(vector.Y, vector.X));
@@ -171,12 +223,31 @@ namespace WGP
         /// <summary>
         /// Returns the angle of the vector.
         /// </summary>
-        /// <param name="x">X component of a vector.</param>
-        /// <param name="y">Y component of a vector.</param>
+        /// <param name="vector">Vector.</param>
         /// <returns>Angle.</returns>
-        static public Angle Angle(float x, float y)
+        static public Angle GetAngle(this Vector2f vector)
         {
-            return Angle(new Vector2f(x, y));
+            return WGP.Angle.FromRadians((float)Math.Atan2(vector.Y, vector.X));
+        }
+        /// <summary>
+        /// Sets the angle of the vector.
+        /// </summary>
+        /// <param name="vector">Vector.</param>
+        /// <param name="angle">Angle of the vector.</param>
+        /// <returns>Angle.</returns>
+        static public void SetAngle(ref this Vector2f vector, Angle angle)
+        {
+            vector = angle.GenerateVector(vector.GetLength());
+        }
+        /// <summary>
+        /// Sets the angle of the vector.
+        /// </summary>
+        /// <param name="vector">Vector.</param>
+        /// <param name="angle">Angle of the vector to add.</param>
+        /// <returns>Angle.</returns>
+        static public void Rotate(ref this Vector2f vector, Angle angle)
+        {
+            vector = angle.RotateVector(vector);
         }
         /// <summary>
         /// Returns the intersection between two lines.
@@ -188,7 +259,7 @@ namespace WGP
         static public Vector2f Intersection(this Line line1, Line line2)
         {
             if (!line1.Collision(line2))
-                return default(Vector2f);
+                return default;
             float t = (line2.Position - line1.Position).CrossProduct(line2.Direction) / line1.Direction.CrossProduct(line2.Direction);
             return line1.GetPoint(t);
         }
@@ -255,34 +326,6 @@ namespace WGP
                 return true;
             else
                 return false;
-        }
-        /// <summary>
-        /// Returns the smallest value.
-        /// </summary>
-        /// <typeparam name="T">Type of the variables. Must be comparable.</typeparam>
-        /// <param name="left">First value.</param>
-        /// <param name="right">Second value.</param>
-        /// <returns>Minimum value.</returns>
-        static public T Min<T>(T left, T right) where T : IComparable
-        {
-            if (left.CompareTo(right) <= 0)
-                return left;
-            else
-                return right;
-        }
-        /// <summary>
-        /// Returns the biggest value.
-        /// </summary>
-        /// <typeparam name="T">Type of the variables. Must be comparable.</typeparam>
-        /// <param name="left">First value.</param>
-        /// <param name="right">Second value.</param>
-        /// <returns>Maximum value.</returns>
-        static public T Max<T>(T left, T right) where T : IComparable
-        {
-            if (left.CompareTo(right) >= 0)
-                return left;
-            else
-                return right;
         }
     }
 }

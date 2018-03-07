@@ -53,6 +53,7 @@
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <DocumentationFile>bin\x64\Release\WildGoatPackage.NET.xml</DocumentationFile>
     <RegisterForComInterop>false</RegisterForComInterop>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -86,7 +87,7 @@
     <Compile Include="IFunction.cs" />
     <Compile Include="Line.cs" />
     <Compile Include="LinearFunction.cs" />
-    <Compile Include="ChainedList.cs" />
+    <Compile Include="LinkedList.cs" />
     <Compile Include="PowFunction.cs" />
     <Compile Include="ProgressiveFunction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

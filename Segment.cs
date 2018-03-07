@@ -24,6 +24,14 @@ namespace WGP
 
         }
         /// <summary>
+        /// Copy constructor.
+        /// </summary>
+        /// <param name="copy">Segment to copy.</param>
+        public Segment(Segment copy) : base(copy)
+        {
+            Length = copy.Length;
+        }
+        /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="pt1">First point of the segment.</param>
@@ -32,6 +40,5 @@ namespace WGP
         {
             Length = (pt1 - pt2).Length();
         }
-
     }
 }
