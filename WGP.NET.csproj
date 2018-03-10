@@ -83,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Angle.cs" />
+    <Compile Include="FileCompiler.cs" />
     <Compile Include="HSVColor.cs" />
     <Compile Include="IFunction.cs" />
     <Compile Include="Line.cs" />

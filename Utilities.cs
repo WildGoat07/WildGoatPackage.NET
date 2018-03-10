@@ -111,29 +111,68 @@ namespace WGP
         /// Returns the smallest value.
         /// </summary>
         /// <typeparam name="T">Type of the variables. Must be comparable.</typeparam>
-        /// <param name="left">First value.</param>
-        /// <param name="right">Second value.</param>
+        /// <param name="param">values.</param>
         /// <returns>Minimum value.</returns>
-        static public T Min<T>(T left, T right) where T : IComparable
+        static public T Min<T>(params T[] param) where T : IComparable
         {
-            if (left.CompareTo(right) <= 0)
-                return left;
-            else
-                return right;
+            int maxIndex = 0;
+            if (param.Count() == 0)
+                return default;
+            for (int i = 0; i < param.Count(); i++)
+            {
+                if (param[maxIndex].CompareTo(param[i]) >= 0)
+                    maxIndex = i;
+            }
+            return param[maxIndex];
         }
         /// <summary>
         /// Returns the biggest value.
         /// </summary>
         /// <typeparam name="T">Type of the variables. Must be comparable.</typeparam>
-        /// <param name="left">First value.</param>
-        /// <param name="right">Second value.</param>
+        /// <param name="param">values.</param>
         /// <returns>Maximum value.</returns>
-        static public T Max<T>(T left, T right) where T : IComparable
+        static public T Max<T>(params T[] param) where T : IComparable
         {
-            if (left.CompareTo(right) >= 0)
-                return left;
-            else
-                return right;
+            int maxIndex = 0;
+            if (param.Count() == 0)
+                return default;
+            for (int i = 0; i < param.Count(); i++)
+            {
+                if (param[maxIndex].CompareTo(param[i]) >= 0)
+                    maxIndex = i;
+            }
+            return param[maxIndex];
+        }
+        /// <summary>
+        /// Converts a 4 bytes number to a string with 4 characters.
+        /// </summary>
+        /// <param name="nb">Number to convert.</param>
+        /// <returns>The FOURCC corresponding to the number.</returns>
+        static public string Int32ToFOURCC(System.Int32 nb)
+        {
+            char[] str = new char[4];
+            str[3] = (char)(0x000000ff & nb);
+            str[2] = (char)((0x0000ff00 & nb) / 0x0000100);
+            str[1] = (char)((0x00ff0000 & nb) / 0x0010000);
+            str[0] = (char)((0xff000000 & nb) / 0x1000000);
+            return new string(str);
+        }
+        /// <summary>
+        /// Converts a 4 characters string to a 4 bytes number.
+        /// </summary>
+        /// <param name="FOURCC">FOURCC to convert.</param>
+        /// <returns>The number corresponding to the FOURCC.</returns>
+        static public Int32 FOURCCToInt32(string FOURCC)
+        {
+            if (FOURCC.Count() != 4)
+                throw new Exception("The FOURCC id doesn't have 4 characters.");
+            char[] str = FOURCC.ToArray();
+            Int32 result = 0;
+            result += str[3];
+            result += str[2] * 0x100;
+            result += str[1] * 0x10000;
+            result += str[0] * 0x1000000;
+            return result;
         }
     }
     static public class Extensions
