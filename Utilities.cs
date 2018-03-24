@@ -19,7 +19,7 @@ namespace WGP
         /// <returns>Percentage.</returns>
         public static float Percent(float value, float min, float max)
         {
-            return Math.Max(Math.Min((value - min) / (max - min), 1), 0);
+            return Max(Min((value - min) / (max - min), 1), 0);
         }
         /// <summary>
         /// Returns an interpolation.
@@ -115,15 +115,15 @@ namespace WGP
         /// <returns>Minimum value.</returns>
         static public T Min<T>(params T[] param) where T : IComparable
         {
-            int maxIndex = 0;
+            int minIndex = 0;
             if (param.Count() == 0)
                 return default;
             for (int i = 0; i < param.Count(); i++)
             {
-                if (param[maxIndex].CompareTo(param[i]) >= 0)
-                    maxIndex = i;
+                if (param[minIndex].CompareTo(param[i]) >= 0)
+                    minIndex = i;
             }
-            return param[maxIndex];
+            return param[minIndex];
         }
         /// <summary>
         /// Returns the biggest value.
@@ -138,7 +138,7 @@ namespace WGP
                 return default;
             for (int i = 0; i < param.Count(); i++)
             {
-                if (param[maxIndex].CompareTo(param[i]) >= 0)
+                if (param[maxIndex].CompareTo(param[i]) <= 0)
                     maxIndex = i;
             }
             return param[maxIndex];

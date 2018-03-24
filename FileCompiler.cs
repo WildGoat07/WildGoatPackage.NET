@@ -79,6 +79,7 @@ namespace WGP
                     key[3] = (byte)tmp[3];
                     streamOutput.Write(key, 0, 4);
                 }
+                streamInput.Close();
             }
             foreach (var fileStr in Files)
             {
@@ -99,7 +100,9 @@ namespace WGP
                     i++;
                 }
                 Console.WriteLine(i);
+                streamInput.Close();
             }
+            streamOutput.Close();
         }
     }
     /// <summary>
@@ -236,6 +239,7 @@ namespace WGP
                 Files.Add(fourcc, new CompiledFileStream() { Origin = input, Offset = offset + nbFiles * 8 + 4, Size = size, Position = 0 });
                 offset += size;
             }
+            input.Close();
         }
     }
 }

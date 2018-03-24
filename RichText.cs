@@ -29,7 +29,7 @@ namespace WGP
             /// <summary>
             /// The style of the text;
             /// </summary>
-            public Text.Styles Style;
+            public SFML.Graphics.Text.Styles Style;
             internal int Identifier;
             internal bool NewLine;
         }
@@ -39,7 +39,7 @@ namespace WGP
             public FloatRect Box;
         }
         private LinkedList<Part> Parts { get; set; }
-        private List<Text> Buffer { get; set; }
+        private List<WGP.Text> Buffer { get; set; }
         private List<Hitbox> Hitboxes { get; set; }
         /// <summary>
         /// The maximum width of the text. Once the text is at the maximum, it will add automatically a new line. Set to 0 or under to disable.
@@ -62,7 +62,7 @@ namespace WGP
             Font = null;
             CharacterSize = 0;
             Parts = new LinkedList<Part>();
-            Buffer = new List<Text>();
+            Buffer = new List<WGP.Text>();
             Hitboxes = new List<Hitbox>();
             Index = 0;
             MaxWidth = 0;
@@ -147,20 +147,15 @@ namespace WGP
                 int i = 0;
                 foreach(var word in words)
                 {
-                    Text tempText = new Text();
-                    tempText.Color = part.Color;
-                    tempText.DisplayedString = word;
-                    tempText.Style = part.Style;
-                    tempText.Font = Font;
-                    tempText.CharacterSize = CharacterSize;
+                    WGP.Text tempText = new WGP.Text(word, Font, CharacterSize, part.Color, part.Style);
                     if (MaxWidth <= 0)
                     {
                         tempText.Position = offset;
-                        offset.X += tempText.FindCharacterPos((uint)tempText.DisplayedString.Count()).X;
+                        offset.X += tempText.FindCharacterPos((uint)tempText.String.Count()).X;
                     }
                     else
                     {
-                        float width = tempText.FindCharacterPos((uint)tempText.DisplayedString.Count()).X;
+                        float width = tempText.FindCharacterPos((uint)tempText.String.Count()).X;
                         if (width + offset.X > MaxWidth)
                         {
                             offset.X = 0;
@@ -169,7 +164,7 @@ namespace WGP
                         tempText.Position = offset;
                         offset.X += width;
                     }
-                    Hitboxes.Add(new Hitbox() { Box = new FloatRect(tempText.Position, tempText.FindCharacterPos((uint)tempText.DisplayedString.Count()) + new Vector2f(0, CharacterSize)), Identifier = part.Identifier });
+                    Hitboxes.Add(new Hitbox() { Box = new FloatRect(tempText.Position - new Vector2f(0, CharacterSize), tempText.Transform.TransformPoint(tempText.FindCharacterPos((uint)tempText.String.Count())) - (tempText.Position - new Vector2f(0, CharacterSize))), Identifier = part.Identifier });
                     if (part.NewLine && i == words.Count - 1)
                     {
                         offset.X = 0;
