@@ -91,9 +91,7 @@
     <Compile Include="PowFunction.cs" />
     <Compile Include="ProgressiveFunction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RichText.cs" />
     <Compile Include="Segment.cs" />
-    <Compile Include="Text.cs" />
     <Compile Include="Utilities.cs" />
   </ItemGroup>
   <ItemGroup>

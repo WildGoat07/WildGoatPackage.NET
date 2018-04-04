@@ -9,7 +9,7 @@ namespace WGP
     /// <summary>
     /// Angle class. Used for angle conversions.
     /// </summary>
-    public struct Angle : IComparable, IComparable<Angle>, IEquatable<Angle>
+    public struct Angle : IComparable, IComparable<Angle>, IEquatable<Angle>, IFormattable
     {
         /// <summary>
         /// Angle corresponing to 0 degrees or 0 radians.
@@ -36,6 +36,13 @@ namespace WGP
         {
             get => radian;
             set => radian = value;
+        }
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public Angle(Angle other)
+        {
+            radian = other.radian;
         }
         /// <summary>
         /// Returns the rotated vector corresponding to the angle.
@@ -153,8 +160,21 @@ namespace WGP
         }
         public override string ToString()
         {
-            return "{ [Radians:" + Radian + "] , [Degrees:" + Degree + "] }";
+            return ToString(null, System.Globalization.CultureInfo.CurrentCulture);
         }
+
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            if (format == null || format == "" || format == "G")
+                return "{ [Radians:" + Radian + "] , [Degrees:" + Degree + "] }";
+            else if (format == "D")
+                return Degree.ToString("G", formatProvider);
+            else if (format == "R")
+                return Radian.ToString("G", formatProvider);
+            else
+                return "{ [Radians:" + Radian + "] , [Degrees:" + Degree + "] }";
+        }
+
         static public Angle operator +(Angle left, Angle right)
         {
             return FromRadians(left.radian + right.radian);
