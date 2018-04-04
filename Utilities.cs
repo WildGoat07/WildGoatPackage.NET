@@ -361,10 +361,19 @@ namespace WGP
         /// <returns>True if <paramref name="value"/> is in the range.</returns>
         static public bool IsInRange<T>(this T value, T min, T max) where T : IComparable
         {
-            if (value.CompareTo(min) >= 0 && value.CompareTo(max) <= 0)
-                return true;
-            else
-                return false;
+            return value.CompareTo(min) >= 0 && value.CompareTo(max) <= 0;
+        }
+        /// <summary>
+        /// Cap the value between a maximum and a minimum value.
+        /// </summary>
+        /// <typeparam name="T">Type of the variable. Must be comparable.</typeparam>
+        /// <param name="value">Value to cap.</param>
+        /// <param name="min">Minimum value.</param>
+        /// <param name="max">Maximum value.</param>
+        /// <returns>Capped value.</returns>
+        static public T Capped<T>(this T value, T min, T max) where T : IComparable
+        {
+            return Utilities.Min(min, Utilities.Max(max, value));
         }
     }
 }
