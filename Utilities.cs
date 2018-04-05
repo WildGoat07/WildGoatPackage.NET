@@ -373,7 +373,7 @@ namespace WGP
         /// <returns>Capped value.</returns>
         static public T Capped<T>(this T value, T min, T max) where T : IComparable
         {
-            return Utilities.Min(min, Utilities.Max(max, value));
+            return Utilities.Max(min, Utilities.Min(max, value));
         }
     }
 }
