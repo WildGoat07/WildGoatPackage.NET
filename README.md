@@ -4,6 +4,8 @@
 
 Base package for my other packages for .NET languages.
 
+Provides some utility methods and some extension methods.
+
 ## Dependencies
 
 * [sfmlnet-graphics-2](https://www.sfml-dev.org/download/sfml.net/)
