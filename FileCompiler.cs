@@ -93,13 +93,8 @@ namespace WGP
                     throw new Exception("An error occurrenced loading the input file to \"" + fileStr.Value + "\" : ", e);
                 }
                 byte[] bin = new byte[1];
-                int i = 0;
                 while (streamInput.Read(bin, 0, 1) == 1)
-                {
                     streamOutput.Write(bin, 0, 1);
-                    i++;
-                }
-                Console.WriteLine(i);
                 streamInput.Close();
             }
             streamOutput.Close();
@@ -110,7 +105,7 @@ namespace WGP
     /// </summary>
     public class FileExtracter
     {
-        public class CompiledFileStream : Stream
+        internal class CompiledFileStream : Stream
         {
             internal Stream Origin { get; set; }
             internal long Offset { get; set; }
@@ -140,7 +135,6 @@ namespace WGP
 
             public override void Flush()
             {
-                throw new NotSupportedException();
             }
 
             public override int Read(byte[] buffer, int offset, int count)
@@ -156,11 +150,11 @@ namespace WGP
             public override long Seek(long offset, SeekOrigin origin)
             {
                 if (origin == SeekOrigin.Begin)
-                    Position = Utilities.Min(Length - 1, offset);
+                    Position = offset.Capped(0, Length - 1);
                 if (origin == SeekOrigin.Current)
-                    Position = Utilities.Min(Length - 1, offset + Position);
+                    Position = (offset + position).Capped(0, Length - 1);
                 if (origin == SeekOrigin.End)
-                    Position = Utilities.Min(Length - 1, Length - 1 + offset);
+                    Position = (offset + Length - 1).Capped(0, Length - 1);
                 return Position;
 
             }
@@ -173,6 +167,13 @@ namespace WGP
             public override void Write(byte[] buffer, int offset, int count)
             {
                 throw new NotSupportedException();
+            }
+
+            protected override void Dispose(bool disposing)
+            {
+                base.Dispose(disposing);
+                if (disposing)
+                    Origin.Dispose();
             }
         }
         /// <summary>

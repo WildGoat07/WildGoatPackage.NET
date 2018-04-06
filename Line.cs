@@ -28,7 +28,11 @@ namespace WGP
         /// <summary>
         /// Constructor.
         /// </summary>
-        public Line() { }
+        public Line()
+        {
+            Position = new Vector2f();
+            direction = new Vector2f();
+        }
         /// <summary>
         /// Copy constructor.
         /// </summary>

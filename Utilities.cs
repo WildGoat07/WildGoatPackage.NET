@@ -187,6 +187,8 @@ namespace WGP
         /// <returns>Interpolation.</returns>
         public static float Interpolation(this IFunction fct, float percent, float min, float max)
         {
+            if (fct == null)
+                return default;
             return fct.Image(percent) * (max - min) + min;
         }
         /// <summary>

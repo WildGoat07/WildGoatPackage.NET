@@ -14,11 +14,11 @@ namespace WGP
         /// <summary>
         /// Angle corresponing to 0 degrees or 0 radians.
         /// </summary>
-        static public Angle Zero { get => FromRadians(0); }
+        static public Angle Zero => FromRadians(0);
         /// <summary>
         /// Angle corresponing to 360 degrees or 2PI radians.
         /// </summary>
-        static public Angle Loop { get => FromRadians(2 * (float)Math.PI); }
+        static public Angle Loop => FromRadians(2 * (float)Math.PI);
 
         private float radian;
         /// <summary>
