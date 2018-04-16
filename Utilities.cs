@@ -23,19 +23,12 @@ namespace WGP
             {
                 return Max(Min((value - min) / (max - min), 1), 0);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 throw new Exception("Can't compute a percent from the given types.");
             }
         }
-        /// <summary>
-        /// Returns an interpolation.
-        /// </summary>
-        /// <param name="percent">Percent. Must be between [0,1].</param>
-        /// <param name="min">Minimal value.</param>
-        /// <param name="max">Maximal value.</param>
-        /// <returns>Interpolation.</returns>
-        public static dynamic Interpolation(float percent, dynamic min, dynamic max)
+        private static dynamic Interpolation(float percent, dynamic min, dynamic max)
         {
             try
             {
@@ -45,6 +38,17 @@ namespace WGP
             {
                 throw new Exception("Can't compute an interpolation from the given types.");
             }
+        }
+        /// <summary>
+        /// Returns an interpolation.
+        /// </summary>
+        /// <param name="percent">Percent. Must be between [0,1].</param>
+        /// <param name="min">Minimal value.</param>
+        /// <param name="max">Maximal value.</param>
+        /// <returns>Interpolation.</returns>
+        public static T Interpolation<T>(float percent, T min, T max)
+        {
+            return Interpolation(percent, min, max);
         }
         /// <summary>
         /// Returns an SFML image from a system bitmap image.
@@ -191,15 +195,7 @@ namespace WGP
     }
     static public class Extensions
     {
-        /// <summary>
-        /// Returns an interpolation.
-        /// </summary>
-        /// <param name="fct">Referential function.</param>
-        /// <param name="percent">Percent. Must be between [0,1].</param>
-        /// <param name="min">Minimal value.</param>
-        /// <param name="max">Maximal value.</param>
-        /// <returns>Interpolation.</returns>
-        public static dynamic Interpolation(this IFunction fct, float percent, dynamic min, dynamic max)
+        private static dynamic Interpolation(IFunction fct, float percent, dynamic min, dynamic max)
         {
             if (fct == null)
                 return default;
@@ -211,6 +207,18 @@ namespace WGP
             {
                 throw new Exception("Can't compute an interpolation from the given types.");
             }
+        }
+        /// <summary>
+        /// Returns an interpolation.
+        /// </summary>
+        /// <param name="fct">Referential function.</param>
+        /// <param name="percent">Percent. Must be between [0,1].</param>
+        /// <param name="min">Minimal value.</param>
+        /// <param name="max">Maximal value.</param>
+        /// <returns>Interpolation.</returns>
+        public static T Interpolation<T>(this IFunction fct, float percent, T min, T max)
+        {
+            return Interpolation(fct, percent, min, max);
         }
         /// <summary>
         /// Test if a FloatRect contains a Vector2f.
