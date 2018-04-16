@@ -17,9 +17,16 @@ namespace WGP
         /// <param name="min">Minmal value.</param>
         /// <param name="max">Maximal value.</param>
         /// <returns>Percentage.</returns>
-        public static float Percent(float value, float min, float max)
+        public static float Percent(dynamic value, dynamic min, dynamic max)
         {
-            return Max(Min((value - min) / (max - min), 1), 0);
+            try
+            {
+                return Max(Min((value - min) / (max - min), 1), 0);
+            }
+            catch(Exception e)
+            {
+                throw new Exception("Can't compute a percent from the given types.");
+            }
         }
         /// <summary>
         /// Returns an interpolation.
@@ -28,9 +35,16 @@ namespace WGP
         /// <param name="min">Minimal value.</param>
         /// <param name="max">Maximal value.</param>
         /// <returns>Interpolation.</returns>
-        public static float Interpolation(float percent, float min, float max)
+        public static dynamic Interpolation(float percent, dynamic min, dynamic max)
         {
-            return percent * (max - min) + min;
+            try
+            {
+                return percent * (max - min) + min;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Can't compute an interpolation from the given types.");
+            }
         }
         /// <summary>
         /// Returns an SFML image from a system bitmap image.
@@ -185,11 +199,18 @@ namespace WGP
         /// <param name="min">Minimal value.</param>
         /// <param name="max">Maximal value.</param>
         /// <returns>Interpolation.</returns>
-        public static float Interpolation(this IFunction fct, float percent, float min, float max)
+        public static dynamic Interpolation(this IFunction fct, float percent, dynamic min, dynamic max)
         {
             if (fct == null)
                 return default;
-            return fct.Image(percent) * (max - min) + min;
+            try
+            {
+                return fct.Image(percent) * (max - min) + min;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Can't compute an interpolation from the given types.");
+            }
         }
         /// <summary>
         /// Test if a FloatRect contains a Vector2f.
