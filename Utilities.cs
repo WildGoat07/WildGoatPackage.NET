@@ -17,24 +17,28 @@ namespace WGP
         /// <param name="min">Minmal value.</param>
         /// <param name="max">Maximal value.</param>
         /// <returns>Percentage.</returns>
-        public static float Percent(dynamic value, dynamic min, dynamic max)
+        public static float Percent<T>(T value, T min, T max)
+        {
+                return PercentD(value, min, max);
+        }
+        private static float PercentD(dynamic value, dynamic min, dynamic max)
         {
             try
             {
                 return Max(Min((value - min) / (max - min), 1), 0);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw new Exception("Can't compute a percent from the given types.");
             }
         }
-        private static dynamic Interpolation(float percent, dynamic min, dynamic max)
+        private static dynamic InterpolationD(float percent, dynamic min, dynamic max)
         {
             try
             {
                 return percent * (max - min) + min;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw new Exception("Can't compute an interpolation from the given types.");
             }
@@ -48,7 +52,7 @@ namespace WGP
         /// <returns>Interpolation.</returns>
         public static T Interpolation<T>(float percent, T min, T max)
         {
-            return Interpolation(percent, min, max);
+            return InterpolationD(percent, min, max);
         }
         /// <summary>
         /// Returns an SFML image from a system bitmap image.
@@ -195,7 +199,7 @@ namespace WGP
     }
     static public class Extensions
     {
-        private static dynamic Interpolation(IFunction fct, float percent, dynamic min, dynamic max)
+        private static dynamic InterpolationD(IFunction fct, float percent, dynamic min, dynamic max)
         {
             if (fct == null)
                 return default;
@@ -218,7 +222,7 @@ namespace WGP
         /// <returns>Interpolation.</returns>
         public static T Interpolation<T>(this IFunction fct, float percent, T min, T max)
         {
-            return Interpolation(fct, percent, min, max);
+            return InterpolationD(fct, percent, min, max);
         }
         /// <summary>
         /// Test if a FloatRect contains a Vector2f.
