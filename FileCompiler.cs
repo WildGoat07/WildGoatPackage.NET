@@ -135,6 +135,7 @@ namespace WGP
 
             public override void Flush()
             {
+                Origin.Flush();
             }
 
             public override int Read(byte[] buffer, int offset, int count)
