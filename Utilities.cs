@@ -73,50 +73,6 @@ namespace WGP
             return result;
         }
         /// <summary>
-        /// Crypt a string.
-        /// </summary>
-        /// <param name="str">String to crypt.</param>
-        /// <param name="key">Key to crypt. (Optional)</param>
-        /// <returns>Crypted string.</returns>
-        public static string Crypt(string str, string key = "")
-        {
-            string result = "";
-            for (int i = 0; i < str.Count(); i++)
-            {
-                byte car = (byte)str[i];
-                car = (byte)(255 - car);
-                if (i > 0)
-                    car += (byte)str[i - 1];
-                car += (byte)(str.Count() * 10 + 50 + i * 5);
-                if (key.Count() > 0)
-                    car += (byte)(key[i % key.Count()]);
-                result += (char)car;
-            }
-            return result;
-        }
-        /// <summary>
-        /// Uncrypt a string.
-        /// </summary>
-        /// <param name="str">String to uncrypt.</param>
-        /// <param name="key">Key to uncrypt. (Optional)</param>
-        /// <returns>Uncrypted string.</returns>
-        public static string Uncrypt(string str, string key = "")
-        {
-            string result = "";
-            for (int i = 0;i<str.Count();i++)
-            {
-                byte car = (byte)str[i];
-                if (key.Count() > 0)
-                    car -= (byte)(key[i % key.Count()]);
-                car -= (byte)(str.Count() * 10 + 50 + i * 5);
-                if (i > 0)
-                    car -= (byte)result[i - 1];
-                car = (byte)(255 - car);
-                result += (char)car;
-            }
-            return result;
-        }
-        /// <summary>
         /// Returns the GCD of two numbers.
         /// </summary>
         /// <param name="a">First number.</param>
