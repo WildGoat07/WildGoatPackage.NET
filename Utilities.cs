@@ -366,5 +366,283 @@ namespace WGP
         {
             return Utilities.Max(min, Utilities.Min(max, value));
         }
+        #region Stream . Write / Read base type
+        /// <summary>
+        /// Reads a base type and returns it.
+        /// </summary>
+        /// <param name="stream">Input stream.</param>
+        /// <returns>Base type read.</returns>
+        static public Int16 ReadInt16(this System.IO.Stream stream)
+        {
+            var bytes = new byte[sizeof(Int16)];
+            stream.Read(bytes, 0, bytes.Length);
+            return BitConverter.ToInt16(bytes, 0);
+        }
+        /// <summary>
+        /// Reads a base type and returns it.
+        /// </summary>
+        /// <param name="stream">Input stream.</param>
+        /// <returns>Base type read.</returns>
+        static public Int32 ReadInt32(this System.IO.Stream stream)
+        {
+            var bytes = new byte[sizeof(Int32)];
+            stream.Read(bytes, 0, bytes.Length);
+            return BitConverter.ToInt32(bytes, 0);
+        }
+        /// <summary>
+        /// Reads a base type and returns it.
+        /// </summary>
+        /// <param name="stream">Input stream.</param>
+        /// <returns>Base type read.</returns>
+        static public Int64 ReadInt64(this System.IO.Stream stream)
+        {
+            var bytes = new byte[sizeof(Int64)];
+            stream.Read(bytes, 0, bytes.Length);
+            return BitConverter.ToInt64(bytes, 0);
+        }
+        /// <summary>
+        /// Reads a base type and returns it.
+        /// </summary>
+        /// <param name="stream">Input stream.</param>
+        /// <returns>Base type read.</returns>
+        static public UInt16 ReadUInt16(this System.IO.Stream stream)
+        {
+            var bytes = new byte[sizeof(UInt16)];
+            stream.Read(bytes, 0, bytes.Length);
+            return BitConverter.ToUInt16(bytes, 0);
+        }
+        /// <summary>
+        /// Reads a base type and returns it.
+        /// </summary>
+        /// <param name="stream">Input stream.</param>
+        /// <returns>Base type read.</returns>
+        static public UInt32 ReadUInt32(this System.IO.Stream stream)
+        {
+            var bytes = new byte[sizeof(UInt32)];
+            stream.Read(bytes, 0, bytes.Length);
+            return BitConverter.ToUInt32(bytes, 0);
+        }
+        /// <summary>
+        /// Reads a base type and returns it.
+        /// </summary>
+        /// <param name="stream">Input stream.</param>
+        /// <returns>Base type read.</returns>
+        static public UInt64 ReadUInt64(this System.IO.Stream stream)
+        {
+            var bytes = new byte[sizeof(UInt64)];
+            stream.Read(bytes, 0, bytes.Length);
+            return BitConverter.ToUInt64(bytes, 0);
+        }
+        /// <summary>
+        /// Reads a base type and returns it.
+        /// </summary>
+        /// <param name="stream">Input stream.</param>
+        /// <returns>Base type read.</returns>
+        static public Char ReadChar(this System.IO.Stream stream)
+        {
+            var bytes = new byte[sizeof(Char)];
+            stream.Read(bytes, 0, bytes.Length);
+            return BitConverter.ToChar(bytes, 0);
+        }
+        /// <summary>
+        /// Reads a base type and returns it.
+        /// </summary>
+        /// <param name="stream">Input stream.</param>
+        /// <returns>Base type read.</returns>
+        static public Single ReadSingle(this System.IO.Stream stream)
+        {
+            var bytes = new byte[sizeof(Single)];
+            stream.Read(bytes, 0, bytes.Length);
+            return BitConverter.ToSingle(bytes, 0);
+        }
+        /// <summary>
+        /// Reads a base type and returns it.
+        /// </summary>
+        /// <param name="stream">Input stream.</param>
+        /// <returns>Base type read.</returns>
+        static public Double ReadDouble(this System.IO.Stream stream)
+        {
+            var bytes = new byte[sizeof(Double)];
+            stream.Read(bytes, 0, bytes.Length);
+            return BitConverter.ToDouble(bytes, 0);
+        }
+        /// <summary>
+        /// Reads a base type and returns it.
+        /// </summary>
+        /// <param name="stream">Input stream.</param>
+        /// <returns>Base type read.</returns>
+        static public Boolean ReadBoolean(this System.IO.Stream stream)
+        {
+            var bytes = new byte[sizeof(Boolean)];
+            stream.Read(bytes, 0, bytes.Length);
+            return BitConverter.ToBoolean(bytes, 0);
+        }
+        /// <summary>
+        /// Reads a base type and returns it.
+        /// </summary>
+        /// <param name="stream">Input stream.</param>
+        /// <returns>Base type read.</returns>
+        static public SByte ReadInt8(this System.IO.Stream stream)
+        {
+            var bytes = new byte[sizeof(SByte)];
+            stream.Read(bytes, 0, bytes.Length);
+            return (SByte)bytes[0];
+        }
+        /// <summary>
+        /// Reads a base type and returns it.
+        /// </summary>
+        /// <param name="stream">Input stream.</param>
+        /// <returns>Base type read.</returns>
+        static public Byte ReadUInt8(this System.IO.Stream stream)
+        {
+            var bytes = new byte[sizeof(Byte)];
+            stream.Read(bytes, 0, bytes.Length);
+            return bytes[0];
+        }
+        /// <summary>
+        /// Reads a string (Unicode) and returns it.
+        /// </summary>
+        /// <param name="stream">Input stream.</param>
+        /// <param name="nbChars">Number of characters to read.</param>
+        /// <returns>String read.</returns>
+        static public String ReadString(this System.IO.Stream stream, uint nbChars)
+        {
+            var bytes = new byte[sizeof(Char) * nbChars];
+            stream.Read(bytes, 0, bytes.Length);
+            return Encoding.Unicode.GetString(bytes);
+        }
+        /// <summary>
+        /// Write a base type.
+        /// </summary>
+        /// <param name="stream">Output stream.</param>
+        /// <param name="value">Base type to write.</param>
+        static public void WriteInt8(this System.IO.Stream stream, SByte value)
+        {
+            var bytes = new byte[sizeof(SByte)];
+            bytes[0] = (byte)value;
+            stream.Write(bytes, 0, bytes.Length);
+        }
+        /// <summary>
+        /// Write a base type.
+        /// </summary>
+        /// <param name="stream">Output stream.</param>
+        /// <param name="value">Base type to write.</param>
+        static public void WriteInt16(this System.IO.Stream stream, Int16 value)
+        {
+            var bytes = BitConverter.GetBytes(value);
+            stream.Write(bytes, 0, bytes.Length);
+        }
+        /// <summary>
+        /// Write a base type.
+        /// </summary>
+        /// <param name="stream">Output stream.</param>
+        /// <param name="value">Base type to write.</param>
+        static public void WriteInt32(this System.IO.Stream stream, Int32 value)
+        {
+            var bytes = BitConverter.GetBytes(value);
+            stream.Write(bytes, 0, bytes.Length);
+        }
+        /// <summary>
+        /// Write a base type.
+        /// </summary>
+        /// <param name="stream">Output stream.</param>
+        /// <param name="value">Base type to write.</param>
+        static public void WriteInt64(this System.IO.Stream stream, Int64 value)
+        {
+            var bytes = BitConverter.GetBytes(value);
+            stream.Write(bytes, 0, bytes.Length);
+        }
+        /// <summary>
+        /// Write a base type.
+        /// </summary>
+        /// <param name="stream">Output stream.</param>
+        /// <param name="value">Base type to write.</param>
+        static public void WriteUInt8(this System.IO.Stream stream, Byte value)
+        {
+            var bytes = new byte[sizeof(Byte)];
+            bytes[0] = value;
+            stream.Write(bytes, 0, bytes.Length);
+        }
+        /// <summary>
+        /// Write a base type.
+        /// </summary>
+        /// <param name="stream">Output stream.</param>
+        /// <param name="value">Base type to write.</param>
+        static public void WriteUInt16(this System.IO.Stream stream, UInt16 value)
+        {
+            var bytes = BitConverter.GetBytes(value);
+            stream.Write(bytes, 0, bytes.Length);
+        }
+        /// <summary>
+        /// Write a base type.
+        /// </summary>
+        /// <param name="stream">Output stream.</param>
+        /// <param name="value">Base type to write.</param>
+        static public void WriteUInt32(this System.IO.Stream stream, UInt32 value)
+        {
+            var bytes = BitConverter.GetBytes(value);
+            stream.Write(bytes, 0, bytes.Length);
+        }
+        /// <summary>
+        /// Write a base type.
+        /// </summary>
+        /// <param name="stream">Output stream.</param>
+        /// <param name="value">Base type to write.</param>
+        static public void WriteUInt64(this System.IO.Stream stream, UInt64 value)
+        {
+            var bytes = BitConverter.GetBytes(value);
+            stream.Write(bytes, 0, bytes.Length);
+        }
+        /// <summary>
+        /// Write a base type.
+        /// </summary>
+        /// <param name="stream">Output stream.</param>
+        /// <param name="value">Base type to write.</param>
+        static public void WriteBoolean(this System.IO.Stream stream, Boolean value)
+        {
+            var bytes = BitConverter.GetBytes(value);
+            stream.Write(bytes, 0, bytes.Length);
+        }
+        /// <summary>
+        /// Write a base type.
+        /// </summary>
+        /// <param name="stream">Output stream.</param>
+        /// <param name="value">Base type to write.</param>
+        static public void WriteSingle(this System.IO.Stream stream, Single value)
+        {
+            var bytes = BitConverter.GetBytes(value);
+            stream.Write(bytes, 0, bytes.Length);
+        }
+        /// <summary>
+        /// Write a base type.
+        /// </summary>
+        /// <param name="stream">Output stream.</param>
+        /// <param name="value">Base type to write.</param>
+        static public void WriteDouble(this System.IO.Stream stream, Double value)
+        {
+            var bytes = BitConverter.GetBytes(value);
+            stream.Write(bytes, 0, bytes.Length);
+        }
+        /// <summary>
+        /// Write a base type.
+        /// </summary>
+        /// <param name="stream">Output stream.</param>
+        /// <param name="value">Base type to write.</param>
+        static public void WriteChar(this System.IO.Stream stream, Char value)
+        {
+            var bytes = BitConverter.GetBytes(value);
+            stream.Write(bytes, 0, bytes.Length);
+        }
+        /// <summary>
+        /// Write a base type.
+        /// </summary>
+        /// <param name="stream">Output stream.</param>
+        /// <param name="value">Base type to write.</param>
+        static public void WriteString(this System.IO.Stream stream, String value)
+        {
+            var bytes = Encoding.Unicode.GetBytes(value);
+            stream.Write(bytes, 0, bytes.Length);
+        }
+        #endregion
     }
 }
