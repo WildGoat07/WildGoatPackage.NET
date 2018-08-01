@@ -38,7 +38,7 @@ namespace WGP
         /// <param name="pt2">Last point of the segment.</param>
         public Segment(Vector2f pt1, Vector2f pt2) : base(pt1, pt2)
         {
-            Length = (pt1 - pt2).Length();
+            Length = (pt1 - pt2).GetLength();
         }
     }
 }
