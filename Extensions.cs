@@ -563,5 +563,16 @@ namespace WGP
         /// <param name="rect">AABB.</param>
         /// <returns>size of the rect.</returns>
         static public Vector2i Size(this IntRect rect) => new Vector2i(rect.Width, rect.Height);
+        /// <summary>
+        /// Returns a random float between two values.
+        /// </summary>
+        /// <param name="randGen">Generator.</param>
+        /// <param name="min">Min value.</param>
+        /// <param name="max">Max value.</param>
+        /// <returns>Random value.</returns>
+        static public float NextFloat(this Random randGen, float min, float max)
+        {
+            return (float)(randGen.NextDouble() * (max - min) + min);
+        }
     }
 }
