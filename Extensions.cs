@@ -574,5 +574,53 @@ namespace WGP
         {
             return (float)(randGen.NextDouble() * (max - min) + min);
         }
+        /// <summary>
+        /// Converts the TimeSpan to a SFML Time.
+        /// </summary>
+        /// <param name="t">TimeSpan to converts.</param>
+        /// <returns>The resulting Time.</returns>
+        static public Time ToSFML(this TimeSpan t) => Time.FromMicroseconds(t.Ticks / 10);
+        /// <summary>
+        /// Converts the SFML Time to a TimeSpan.
+        /// </summary>
+        /// <param name="t">Time to converts.</param>
+        /// <returns>The resulting TimeSpan.</returns>
+        static public TimeSpan ToSystem(this Time t) => TimeSpan.FromTicks(t.AsMicroseconds() * 10);
+        /// <summary>
+        /// Returns a vector with the Y axis set to 0.
+        /// </summary>
+        /// <param name="vec">Vector to extract the X axis.</param>
+        /// <returns>The vector without the Y axis.</returns>
+        static public Vector2f OnlyX(this Vector2f vec) => new Vector2f(vec.X, 0);
+        /// <summary>
+        /// Returns a vector with the X axis set to 0.
+        /// </summary>
+        /// <param name="vec">Vector to extract the Y axis.</param>
+        /// <returns>The vector without the X axis.</returns>
+        static public Vector2f OnlyY(this Vector2f vec) => new Vector2f(vec.X, 0);
+        /// <summary>
+        /// Returns a vector with the Y axis set to 0.
+        /// </summary>
+        /// <param name="vec">Vector to extract the X axis.</param>
+        /// <returns>The vector without the Y axis.</returns>
+        static public Vector2u OnlyX(this Vector2u vec) => new Vector2u(vec.X, 0);
+        /// <summary>
+        /// Returns a vector with the X axis set to 0.
+        /// </summary>
+        /// <param name="vec">Vector to extract the Y axis.</param>
+        /// <returns>The vector without the X axis.</returns>
+        static public Vector2u OnlyY(this Vector2u vec) => new Vector2u(vec.X, 0);
+        /// <summary>
+        /// Returns a vector with the Y axis set to 0.
+        /// </summary>
+        /// <param name="vec">Vector to extract the X axis.</param>
+        /// <returns>The vector without the Y axis.</returns>
+        static public Vector2i OnlyX(this Vector2i vec) => new Vector2i(vec.X, 0);
+        /// <summary>
+        /// Returns a vector with the X axis set to 0.
+        /// </summary>
+        /// <param name="vec">Vector to extract the Y axis.</param>
+        /// <returns>The vector without the X axis.</returns>
+        static public Vector2i OnlyY(this Vector2i vec) => new Vector2i(vec.X, 0);
     }
 }

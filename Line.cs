@@ -61,5 +61,14 @@ namespace WGP
         {
             return Position + t * Direction;
         }
+        /// <summary>
+        /// Creates a segment from the line.
+        /// </summary>
+        /// <param name="length">Length of the segment.</param>
+        /// <returns>Created segment from the line.</returns>
+        public Segment AsSegment(float length)
+        {
+            return new Segment(Position, Direction * length);
+        }
     }
 }

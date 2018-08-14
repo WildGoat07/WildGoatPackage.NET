@@ -40,5 +40,13 @@ namespace WGP
         {
             Length = (pt1 - pt2).GetLength();
         }
+        /// <summary>
+        /// Creates a line from the segment.
+        /// </summary>
+        /// <returns>Line created from the segment.</returns>
+        public Line AsLine()
+        {
+            return new Line(Position, Direction);
+        }
     }
 }
