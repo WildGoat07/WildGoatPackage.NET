@@ -597,7 +597,7 @@ namespace WGP
         /// </summary>
         /// <param name="vec">Vector to extract the Y axis.</param>
         /// <returns>The vector without the X axis.</returns>
-        static public Vector2f OnlyY(this Vector2f vec) => new Vector2f(vec.X, 0);
+        static public Vector2f OnlyY(this Vector2f vec) => new Vector2f(0, vec.Y);
         /// <summary>
         /// Returns a vector with the Y axis set to 0.
         /// </summary>
@@ -609,7 +609,7 @@ namespace WGP
         /// </summary>
         /// <param name="vec">Vector to extract the Y axis.</param>
         /// <returns>The vector without the X axis.</returns>
-        static public Vector2u OnlyY(this Vector2u vec) => new Vector2u(vec.X, 0);
+        static public Vector2u OnlyY(this Vector2u vec) => new Vector2u(0, vec.Y);
         /// <summary>
         /// Returns a vector with the Y axis set to 0.
         /// </summary>
@@ -621,6 +621,6 @@ namespace WGP
         /// </summary>
         /// <param name="vec">Vector to extract the Y axis.</param>
         /// <returns>The vector without the X axis.</returns>
-        static public Vector2i OnlyY(this Vector2i vec) => new Vector2i(vec.X, 0);
+        static public Vector2i OnlyY(this Vector2i vec) => new Vector2i(0, vec.Y);
     }
 }
