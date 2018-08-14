@@ -25,11 +25,18 @@ namespace WGP
         {
             try
             {
-                return Max(Min((value - min) / (max - min), 1), 0);
+                return ((float)(value - min) / (float)(max - min)).Capped(0, 1);
             }
             catch (Exception)
             {
-                throw new Exception("Can't compute a percent from the given types.");
+                try
+                {
+                    return ((value - min) / (max - min)).Capped(0, 1);
+                }
+                catch (Exception)
+                {
+                    throw new Exception("Can't compute a percent from the given types.");
+                }
             }
         }
         private static dynamic InterpolationD(float percent, dynamic min, dynamic max)
