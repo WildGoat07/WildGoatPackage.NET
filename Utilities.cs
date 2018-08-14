@@ -128,18 +128,29 @@ namespace WGP
             }
             return param[maxIndex];
         }/// <summary>
-        /// Creates a FloatRect from 2 coords.
-        /// </summary>
-        /// <param name="pt1">First point.</param>
-        /// <param name="pt2">Second point.</param>
-        /// <returns>Resulting FloatRect.</returns>
-        static public FloatRect CreateRect(Vector2f pt1, Vector2f pt2)
+         /// Creates a FloatRect from multiple coords. The resulting box will be able to contain all given coords.
+         /// </summary>
+         /// <param name="pts">Points.</param>
+         /// <returns>Resulting FloatRect.</returns>
+        static public FloatRect CreateRect(params Vector2f[] pts)
         {
+            if (pts == null)
+                throw new ArgumentNullException("pts");
+            if (pts.Length == 0)
+                throw new Exception("Too few vectors in the list.");
             FloatRect result = new FloatRect();
-            result.Left = Min(pt1.X, pt2.X);
-            result.Top = Min(pt1.Y, pt2.Y);
-            result.Width = Max(pt1.X, pt2.X) - result.Left;
-            result.Height = Max(pt1.Y, pt2.Y) - result.Top;
+            Vector2f min = pts[0], max = pts[0];
+            foreach (var item in pts)
+            {
+                min.X = Min(min.X, item.X);
+                min.Y = Min(min.Y, item.Y);
+                max.X = Max(max.X, item.X);
+                max.Y = Max(max.Y, item.Y);
+            }
+            result.Left = min.X;
+            result.Top = min.Y;
+            result.Width = max.X - min.X;
+            result.Height = max.Y - min.Y;
 
             return result;
         }
