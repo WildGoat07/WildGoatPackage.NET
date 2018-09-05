@@ -93,5 +93,20 @@ namespace WGP
             }
             return false;
         }
+        /// <summary>
+        /// Applies a transformation to an hitbox and returns the transformed one.
+        /// </summary>
+        /// <param name="tr">Transformation to apply.</param>
+        /// <param name="box">Original hitbox.</param>
+        /// <returns>Transformed hitbox.</returns>
+        public static IHitbox TransformHitbox(this Transform tr, IHitbox box)
+        {
+            var result = new CustomHitbox();
+
+            foreach (var item in box.Vertices)
+                result.CustomShape.Add(tr.TransformPoint(item));
+
+            return result;
+        }
     }
 }
