@@ -8,7 +8,7 @@ using SFML.System;
 
 namespace WGP
 {
-    public static class Utilities
+    public static partial class Utilities
     {
         /// <summary>
         /// Returns a percentage.

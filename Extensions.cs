@@ -8,7 +8,7 @@ using SFML.System;
 
 namespace WGP
 {
-    static public class Extensions
+    static public partial class Extensions
     {
         private static dynamic InterpolationD(IFunction fct, float percent, dynamic min, dynamic max)
         {
@@ -69,9 +69,9 @@ namespace WGP
         /// <param name="vector">Vector.</param>
         /// <param name="length">Length of the vector.</param>
         /// <returns>Length.</returns>
-        public static void SetLength(ref this Vector2f vector, float length)
+        public static Vector2f SetLength(this Vector2f vector, float length)
         {
-            vector = vector.GetAngle().GenerateVector(length);
+            return vector.GetAngle().GenerateVector(length);
         }
         /// <summary>
         /// Normalize a vector.
@@ -100,9 +100,9 @@ namespace WGP
         /// <param name="vector">Vector.</param>
         /// <param name="angle">Angle of the vector.</param>
         /// <returns>Angle.</returns>
-        static public void SetAngle(ref this Vector2f vector, Angle angle)
+        static public Vector2f SetAngle( this Vector2f vector, Angle angle)
         {
-            vector = angle.GenerateVector(vector.GetLength());
+            return angle.GenerateVector(vector.GetLength());
         }
         /// <summary>
         /// Sets the angle of the vector.
@@ -110,9 +110,9 @@ namespace WGP
         /// <param name="vector">Vector.</param>
         /// <param name="angle">Angle of the vector to add.</param>
         /// <returns>Angle.</returns>
-        static public void Rotate(ref this Vector2f vector, Angle angle)
+        static public Vector2f Rotate(this Vector2f vector, Angle angle)
         {
-            vector = angle.RotateVector(vector);
+            return angle.RotateVector(vector);
         }
         /// <summary>
         /// Returns the intersection between two lines.
@@ -176,6 +176,16 @@ namespace WGP
         static public float CrossProduct(this Vector2f vec1, Vector2f vec2)
         {
             return vec1.X * vec2.Y - vec1.Y * vec2.X;
+        }
+        /// <summary>
+        /// Returns the dot product of two vectors.
+        /// </summary>
+        /// <param name="vec1">First vector.</param>
+        /// <param name="vec2">Second vector.</param>
+        /// <returns>Dot product.</returns>
+        static public float DotProduct(this Vector2f vec1, Vector2f vec2)
+        {
+            return vec1.X * vec2.X + vec1.Y * vec2.Y;
         }
         /// <summary>
         /// Tests if <paramref name="value"/> is in the [<paramref name="min"/> , <paramref name="max"/>] range. <paramref name="min"/> and <paramref name="max"/> are included in the range.
@@ -622,5 +632,41 @@ namespace WGP
         /// <param name="vec">Vector to extract the Y axis.</param>
         /// <returns>The vector without the X axis.</returns>
         static public Vector2i OnlyY(this Vector2i vec) => new Vector2i(0, vec.Y);
+        /// <summary>
+        /// Returns the absolute value.
+        /// </summary>
+        /// <param name="nb">Base number.</param>
+        /// <returns>Absolute value.</returns>
+        static public Double Abs(this Double nb) => Math.Abs(nb);
+        /// <summary>
+        /// Returns the absolute value.
+        /// </summary>
+        /// <param name="nb">Base number.</param>
+        /// <returns>Absolute value.</returns>
+        static public SByte Abs(this SByte nb) => Math.Abs(nb);
+        /// <summary>
+        /// Returns the absolute value.
+        /// </summary>
+        /// <param name="nb">Base number.</param>
+        /// <returns>Absolute value.</returns>
+        static public Int16 Abs(this Int16 nb) => Math.Abs(nb);
+        /// <summary>
+        /// Returns the absolute value.
+        /// </summary>
+        /// <param name="nb">Base number.</param>
+        /// <returns>Absolute value.</returns>
+        static public Int32 Abs(this Int32 nb) => Math.Abs(nb);
+        /// <summary>
+        /// Returns the absolute value.
+        /// </summary>
+        /// <param name="nb">Base number.</param>
+        /// <returns>Absolute value.</returns>
+        static public Int64 Abs(this Int64 nb) => Math.Abs(nb);
+        /// <summary>
+        /// Returns the absolute value.
+        /// </summary>
+        /// <param name="nb">Base number.</param>
+        /// <returns>Absolute value.</returns>
+        static public Single Abs(this Single nb) => Math.Abs(nb);
     }
 }
