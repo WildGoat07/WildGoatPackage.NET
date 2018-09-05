@@ -29,8 +29,8 @@ namespace WGP
             /// Constructor.
             /// </summary>
             /// <param name="stream">Input stream</param>
-            /// <param name="length">Length of the part to read.</param>
-            public StreamOptions(Stream stream, long length)
+            /// <param name="length">Length of the part to read set to -1 to read to the end of the stream. The output stream must handle seeking if set to -1.</param>
+            public StreamOptions(Stream stream, long length = -1)
             {
                 Stream = stream;
                 Length = length;
@@ -43,6 +43,7 @@ namespace WGP
         public DataCompiler(IDictionary<string, StreamOptions> dictionary) : base(dictionary) { }
         public DataCompiler(IDictionary<string, StreamOptions> dictionary, IEqualityComparer<string> comparer) : base(dictionary, comparer) { }
         public DataCompiler(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) : base(info, context)  { }
+        public void Add(string key, Stream stream) => Add(key, new StreamOptions(stream));
         /// <summary>
         /// Writes all the given streams into the given ouptut stream.
         /// </summary>
@@ -62,13 +63,29 @@ namespace WGP
                         stream.WriteInt32(item.Key.Length);
                         stream.WriteString(item.Key);
                     }
+                    if (item.Value.Length >= 0)
                     {
                         stream.WriteInt64(item.Value.Length);
                         for (int i = 0; i < item.Value.Length; i++)
                         {
-
                             stream.WriteUInt8(item.Value.Stream.ReadUInt8());
                         }
+                    }
+                    else
+                    {
+                        byte[] b = new byte[1];
+                        long size = 0;
+                        long sizePos = stream.Position;
+                        stream.WriteInt64(0);
+                        while (item.Value.Stream.Read(b, 0, 1) == 1)
+                        {
+                            stream.Write(b, 0, 1);
+                            size++;
+                        }
+                        long curr = stream.Position;
+                        stream.Position = sizePos;
+                        stream.WriteInt64(size);
+                        stream.Position = curr;
                     }
                 }
             }
