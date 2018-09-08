@@ -11,7 +11,7 @@ namespace WGP.CHANNELS
     /// 
     /// </summary>
     /// <typeparam name="T">Type to share between channels.</typeparam>
-    public class MasterChannel<T> : Module<T>, IEnumerable<Channel<T>>, IDisposable
+    public class MasterChannel<T> : Module<T>, IDisposable
     {
         /// <summary>
         /// The combining function will be called to transfer a value from the superior to the child.
@@ -50,9 +50,5 @@ namespace WGP.CHANNELS
                 child.setMasterTo(null);
             }
         }
-
-        public IEnumerator<Channel<T>> GetEnumerator() => childs.GetEnumerator();
-
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

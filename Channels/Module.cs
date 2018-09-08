@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,7 @@ namespace WGP.CHANNELS
     /// The base module of a channel.
     /// </summary>
     /// <typeparam name="T">Type to share between channels.</typeparam>
-    public abstract class Module<T>
+    public abstract class Module<T> : IEnumerable<Channel<T>>
     {
         /// <summary>
         /// Use the multiplication between the two given values.
@@ -210,5 +211,9 @@ namespace WGP.CHANNELS
         /// </summary>
         /// <param name="chan">Channel to add.</param>
         public abstract void RemoveChild(Channel<T> chan);
+
+        public IEnumerator<Channel<T>> GetEnumerator() => childs.GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }
