@@ -10,7 +10,7 @@ namespace WGP.CHANNELS
     /// A channel. It will transfer the master value to himself and his childs.
     /// </summary>
     /// <typeparam name="T">Type to share between channels.</typeparam>
-    public class Channel<T> : Module<T>
+    public class Channel<T> : Module<T>, IDisposable
     {
         public override T FinalValue
         {
@@ -59,6 +59,15 @@ namespace WGP.CHANNELS
             childs.Remove(chan);
             chan.Superior = null;
             chan.setMasterTo(null);
+        }
+
+        public void Dispose()
+        {
+            foreach (var child in childs)
+            {
+                child.Superior = null;
+                child.setMasterTo(null);
+            }
         }
 
         /// <summary>
