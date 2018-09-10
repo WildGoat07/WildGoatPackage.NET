@@ -21,6 +21,41 @@ namespace WGP
     public static partial class Extensions
     {
         /// <summary>
+        /// Check the collision between a hitbox and a point.
+        /// </summary>
+        /// <param name="box">Hitbox.</param>
+        /// <param name="pt">Point.</param>
+        /// <returns>True if there is a collision, false otherwise.</returns>
+        public static bool Collision(this IHitbox box, Vector2f pt) => Collision(box, pt, new Vector2f(-999999, -999999));
+        /// <summary>
+        /// Check the collision between a hitbox and a point.
+        /// </summary>
+        /// <param name="box">Hitbox.</param>
+        /// <param name="pt">Point.</param>
+        /// <param name="infinitePt">A point that can not be in the hitbox in any way.</param>
+        /// <returns>True if there is a collision, false otherwise.</returns>
+        public static bool Collision(this IHitbox box, Vector2f pt, Vector2f infinitePt)
+        {
+            List<Segment> list = new List<Segment>();
+
+            {
+                var tmp = box.Vertices.ToArray();
+                Vector2f old = tmp.First();
+                for (int i = 1; i <= tmp.Length; i++)
+                {
+                    list.Add(new Segment(old, tmp[i % tmp.Length]));
+                    old = tmp[i % tmp.Length];
+                }
+            }
+            int hit = 0;
+            foreach (var seg in list)
+            {
+                if (seg.Collision(new Segment(infinitePt, pt)))
+                    hit++;
+            }
+            return hit % 2 == 1;
+        }
+        /// <summary>
         /// Check the collision between two hitboxes.
         /// </summary>
         /// <param name="box1">First hitbox.</param>
