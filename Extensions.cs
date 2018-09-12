@@ -211,6 +211,28 @@ namespace WGP
         {
             return Utilities.Max(min, Utilities.Min(max, value));
         }
+        /// <summary>
+        /// Tests if <paramref name="value"/> is in the [<paramref name="min"/> , <paramref name="max"/>] range. <paramref name="min"/> and <paramref name="max"/> are included in the range.
+        /// </summary>
+        /// <param name="value">Value to compare.</param>
+        /// <param name="min">Minimum value of the range.</param>
+        /// <param name="max">Maximum value of the range.</param>
+        /// <returns>True if <paramref name="value"/> is in the range.</returns>
+        static public bool IsInRange(this Time value, Time min, Time max)
+        {
+            return value >= min && value <= max;
+        }
+        /// <summary>
+        /// Cap the value between a maximum and a minimum value.
+        /// </summary>
+        /// <param name="value">Value to cap.</param>
+        /// <param name="min">Minimum value.</param>
+        /// <param name="max">Maximum value.</param>
+        /// <returns>Capped value.</returns>
+        static public Time Capped(this Time value, Time min, Time max)
+        {
+            return Utilities.Max(min, Utilities.Min(max, value));
+        }
         #region Stream . Write / Read base type
         /// <summary>
         /// Reads a base type and returns it.

@@ -39,6 +39,17 @@ namespace WGP
                 }
             }
         }
+        /// <summary>
+        /// Returns a percentage.
+        /// </summary>
+        /// <param name="value">Reference value.</param>
+        /// <param name="min">Minmal value.</param>
+        /// <param name="max">Maximal value.</param>
+        /// <returns>Percentage.</returns>
+        public static float Percent(Time value, Time min, Time max)
+        {
+            return ((value.AsSeconds() - min.AsSeconds()) / (max.AsSeconds() - min.AsSeconds())).Capped(0, 1);
+        }
         private static dynamic InterpolationD(float percent, dynamic min, dynamic max)
         {
             try
@@ -111,6 +122,23 @@ namespace WGP
             return param[minIndex];
         }
         /// <summary>
+        /// Returns the smallest value.
+        /// </summary>
+        /// <param name="param">values.</param>
+        /// <returns>Minimum value.</returns>
+        static public Time Min(params Time[] param)
+        {
+            int minIndex = 0;
+            if (param.Count() == 0)
+                return default;
+            for (int i = 0; i < param.Count(); i++)
+            {
+                if (param[minIndex] > param[i])
+                    minIndex = i;
+            }
+            return param[minIndex];
+        }
+        /// <summary>
         /// Returns the biggest value.
         /// </summary>
         /// <typeparam name="T">Type of the variables. Must be comparable.</typeparam>
@@ -127,7 +155,25 @@ namespace WGP
                     maxIndex = i;
             }
             return param[maxIndex];
-        }/// <summary>
+        }
+        /// <summary>
+        /// Returns the biggest value.
+        /// </summary>
+        /// <param name="param">values.</param>
+        /// <returns>Maximum value.</returns>
+        static public Time Max(params Time[] param)
+        {
+            int maxIndex = 0;
+            if (param.Count() == 0)
+                return default;
+            for (int i = 0; i < param.Count(); i++)
+            {
+                if (param[maxIndex] < param[i])
+                    maxIndex = i;
+            }
+            return param[maxIndex];
+        }
+        /// <summary>
          /// Creates a FloatRect from multiple coords. The resulting box will be able to contain all given coords.
          /// </summary>
          /// <param name="pts">Points.</param>
