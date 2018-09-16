@@ -91,6 +91,24 @@ namespace WGP
             return result;
         }
         /// <summary>
+        /// Returns a system bitmap image from a system image.
+        /// </summary>
+        /// <param name="img">SFML image.</param>
+        /// <returns>Bitmap image.</returns>
+        public static System.Drawing.Bitmap SFMLImageAsSystemBitmap(Image img)
+        {
+            System.Drawing.Bitmap result = new System.Drawing.Bitmap((int)img.Size.X, (int)img.Size.Y);
+            for (int i = 0; i < img.Size.X; i++)
+            {
+                for (int j = 0; j < img.Size.Y; j++)
+                {
+                    var pixel = img.GetPixel((uint)i, (uint)j);
+                    result.SetPixel(i, j, System.Drawing.Color.FromArgb(pixel.A, pixel.R, pixel.G, pixel.B));
+                }
+            }
+            return result;
+        }
+        /// <summary>
         /// Returns the GCD of two numbers.
         /// </summary>
         /// <param name="a">First number.</param>
