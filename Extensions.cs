@@ -535,6 +535,7 @@ namespace WGP
             stream.Write(bytes, 0, bytes.Length);
         }
         #endregion
+        #region Rect operations
         /// <summary>
         /// Returns the top left point of the rect.
         /// </summary>
@@ -563,8 +564,20 @@ namespace WGP
         /// Returns the size of the rect.
         /// </summary>
         /// <param name="rect">AABB.</param>
-        /// <returns>size of the rect.</returns>
+        /// <returns>Size of the rect.</returns>
         static public Vector2f Size(this FloatRect rect) => new Vector2f(rect.Width, rect.Height);
+        /// <summary>
+        /// Returns the bot value of the rect.
+        /// </summary>
+        /// <param name="rect">AABB.</param>
+        /// <returns>Bot of the rect.</returns>
+        static public float Bot(this FloatRect rect) => rect.Top + rect.Height;
+        /// <summary>
+        /// Returns the right value of the rect.
+        /// </summary>
+        /// <param name="rect">AABB.</param>
+        /// <returns>Right of the rect.</returns>
+        static public float Right(this FloatRect rect) => rect.Left + rect.Width;
         /// <summary>
         /// Returns the top left point of the rect.
         /// </summary>
@@ -593,8 +606,21 @@ namespace WGP
         /// Returns the size of the rect.
         /// </summary>
         /// <param name="rect">AABB.</param>
-        /// <returns>size of the rect.</returns>
+        /// <returns>Size of the rect.</returns>
         static public Vector2i Size(this IntRect rect) => new Vector2i(rect.Width, rect.Height);
+        /// <summary>
+        /// Returns the bot value of the rect.
+        /// </summary>
+        /// <param name="rect">AABB.</param>
+        /// <returns>Bot of the rect.</returns>
+        static public int Bot(this IntRect rect) => rect.Top + rect.Height;
+        /// <summary>
+        /// Returns the right value of the rect.
+        /// </summary>
+        /// <param name="rect">AABB.</param>
+        /// <returns>Right of the rect.</returns>
+        static public int Right(this IntRect rect) => rect.Left + rect.Width;
+        #endregion
         /// <summary>
         /// Returns a random float between two values.
         /// </summary>
@@ -618,6 +644,7 @@ namespace WGP
         /// <param name="t">Time to converts.</param>
         /// <returns>The resulting TimeSpan.</returns>
         static public TimeSpan ToSystem(this Time t) => TimeSpan.FromTicks(t.AsMicroseconds() * 10);
+        #region VecOnly?
         /// <summary>
         /// Returns a vector with the Y axis set to 0.
         /// </summary>
@@ -654,6 +681,8 @@ namespace WGP
         /// <param name="vec">Vector to extract the Y axis.</param>
         /// <returns>The vector without the X axis.</returns>
         static public Vector2i OnlyY(this Vector2i vec) => new Vector2i(0, vec.Y);
+        #endregion
+        #region Abs
         /// <summary>
         /// Returns the absolute value.
         /// </summary>
@@ -690,5 +719,18 @@ namespace WGP
         /// <param name="nb">Base number.</param>
         /// <returns>Absolute value.</returns>
         static public Single Abs(this Single nb) => Math.Abs(nb);
+        #endregion
+        /// <summary>
+        /// Creates a hitbox from a Floatrect.
+        /// </summary>
+        /// <param name="rect">AABB.</param>
+        /// <returns>Hitbox.</returns>
+        static public RectangleHitbox CreateHitbox(this FloatRect rect)
+        {
+            RectangleHitbox result = new RectangleHitbox();
+            result.Position = rect.TopLeft() + rect.Size() / 2;
+            result.HalfExtend = rect.Size() / 2;
+            return result;
+        }
     }
 }
