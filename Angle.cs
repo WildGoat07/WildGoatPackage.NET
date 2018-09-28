@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,7 +10,7 @@ namespace WGP
     /// <summary>
     /// Angle class. Used for angle conversions.
     /// </summary>
-    public struct Angle : IComparable, IComparable<Angle>, IEquatable<Angle>, IFormattable
+    public struct Angle : IComparable, IComparable<Angle>, IEquatable<Angle>, IFormattable, ISerializable
     {
         /// <summary>
         /// Angle corresponing to 0 degrees or 0 radians.
@@ -173,6 +174,15 @@ namespace WGP
                 return Radian.ToString("G", formatProvider);
             else
                 return "{ [Radians:" + Radian + "] , [Degrees:" + Degree + "] }";
+        }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("radians", Radian);
+        }
+        public Angle(SerializationInfo info, StreamingContext context)
+        {
+            radian = info.GetSingle("radians");
         }
 
         static public Angle operator +(Angle left, Angle right)
