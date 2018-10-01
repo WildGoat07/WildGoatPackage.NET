@@ -163,7 +163,12 @@ namespace WGP
         {
             return ToString(null, System.Globalization.CultureInfo.CurrentCulture);
         }
-
+        /// <summary>
+        /// Format the string : "D" for the degrees, "R" for the radians.
+        /// </summary>
+        /// <param name="format">Format of the string.</param>
+        /// <param name="formatProvider"></param>
+        /// <returns>Formated string.</returns>
         public string ToString(string format, IFormatProvider formatProvider)
         {
             if (format == null || format == "" || format == "G")
