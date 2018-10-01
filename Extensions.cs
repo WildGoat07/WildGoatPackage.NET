@@ -372,12 +372,7 @@ namespace WGP
         /// <param name="stream">Input stream.</param>
         /// <param name="nbChars">Number of characters to read.</param>
         /// <returns>String read.</returns>
-        static public String ReadString(this System.IO.Stream stream, uint nbChars)
-        {
-            var bytes = new byte[sizeof(Char) * nbChars];
-            stream.Read(bytes, 0, bytes.Length);
-            return Encoding.Unicode.GetString(bytes);
-        }
+        static public String ReadString(this System.IO.Stream stream, uint nbChars) => ReadString(stream, nbChars, Encoding.Unicode);
         /// <summary>
         /// Reads a string (Unicode) and returns it.
         /// </summary>
@@ -387,7 +382,7 @@ namespace WGP
         /// <returns>String read.</returns>
         static public String ReadString(this System.IO.Stream stream, uint nbChars, Encoding encoding)
         {
-            var bytes = new byte[sizeof(Char) * nbChars];
+            var bytes = new byte[encoding.GetByteCount("a") * nbChars];
             stream.Read(bytes, 0, bytes.Length);
             return encoding.GetString(bytes);
         }
@@ -518,11 +513,7 @@ namespace WGP
         /// </summary>
         /// <param name="stream">Output stream.</param>
         /// <param name="value">Base type to write.</param>
-        static public void WriteString(this System.IO.Stream stream, String value)
-        {
-            var bytes = Encoding.Unicode.GetBytes(value);
-            stream.Write(bytes, 0, bytes.Length);
-        }
+        static public void WriteString(this System.IO.Stream stream, String value) => WriteString(stream, value, Encoding.Unicode);
         /// <summary>
         /// Write a base type.
         /// </summary>
