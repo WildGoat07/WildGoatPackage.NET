@@ -45,7 +45,7 @@ namespace WGP
         /// <summary>
         /// The current elapsed time.
         /// </summary>
-        public new Time ElapsedTime
+        public Time ElapsedTime
         {
             get
             {
@@ -94,5 +94,6 @@ namespace WGP
             Update();
             elapsed = Time.Zero;
         }
+        public static implicit operator Chronometer(Clock chrono) => new Chronometer(chrono);
     }
 }
