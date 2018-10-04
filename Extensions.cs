@@ -36,16 +36,6 @@ namespace WGP
             return InterpolationD(fct, percent, min, max);
         }
         /// <summary>
-        /// Test if a FloatRect contains a Vector2f.
-        /// </summary>
-        /// <param name="rect">Box.</param>
-        /// <param name="vec">Vector.</param>
-        /// <returns>True if the vector is inside the box, false if not.</returns>
-        public static bool Contains(this FloatRect rect, Vector2f vec)
-        {
-            return rect.Contains(vec.X, vec.Y);
-        }
-        /// <summary>
         /// Returns the length squared of a vector.
         /// </summary>
         /// <param name="vector">Vector.</param>
