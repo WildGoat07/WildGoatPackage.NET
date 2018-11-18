@@ -73,40 +73,15 @@ namespace WGP
             return InterpolationD(percent, min, max);
         }
         /// <summary>
-        /// Returns an SFML image from a system bitmap image.
+        /// Returns an interpolation.
         /// </summary>
-        /// <param name="img">Bitmap image.</param>
-        /// <returns>SFML image.</returns>
-        public static Image SystemBitmapAsSFML(System.Drawing.Bitmap img)
+        /// <param name="percent">Percent. Must be between [0,1].</param>
+        /// <param name="min">Minimal value.</param>
+        /// <param name="max">Maximal value.</param>
+        /// <returns>Interpolation.</returns>
+        public static Time Interpolation(float percent, Time min, Time max)
         {
-            Image result = new Image((uint)img.Width, (uint)img.Height);
-            for (int i = 0; i < img.Width; i++)
-            {
-                for (int j = 0; j < img.Height; j++)
-                {
-                    var pixel = img.GetPixel(i, j);
-                    result.SetPixel((uint)i, (uint)j, new Color(pixel.R, pixel.G, pixel.B, pixel.A));
-                }
-            }
-            return result;
-        }
-        /// <summary>
-        /// Returns a system bitmap image from a system image.
-        /// </summary>
-        /// <param name="img">SFML image.</param>
-        /// <returns>Bitmap image.</returns>
-        public static System.Drawing.Bitmap SFMLImageAsSystemBitmap(Image img)
-        {
-            System.Drawing.Bitmap result = new System.Drawing.Bitmap((int)img.Size.X, (int)img.Size.Y);
-            for (int i = 0; i < img.Size.X; i++)
-            {
-                for (int j = 0; j < img.Size.Y; j++)
-                {
-                    var pixel = img.GetPixel((uint)i, (uint)j);
-                    result.SetPixel(i, j, System.Drawing.Color.FromArgb(pixel.A, pixel.R, pixel.G, pixel.B));
-                }
-            }
-            return result;
+            return percent * (max - min) + min;
         }
         /// <summary>
         /// Returns the GCD of two numbers.
@@ -127,34 +102,70 @@ namespace WGP
         /// <typeparam name="T">Type of the variables. Must be comparable.</typeparam>
         /// <param name="param">values.</param>
         /// <returns>Minimum value.</returns>
-        static public T Min<T>(params T[] param) where T : IComparable
+        static public T Min<T>(params T[] param) where T : IComparable => Min(param.AsEnumerable());
+        /// <summary>
+        /// Returns the smallest value.
+        /// </summary>
+        /// <typeparam name="T">Type of the variables. Must be comparable.</typeparam>
+        /// <param name="param">values.</param>
+        /// <returns>Minimum value.</returns>
+        static public T Min<T>(IEnumerable<T> param) where T : IComparable
         {
-            int minIndex = 0;
             if (param.Count() == 0)
                 return default;
-            for (int i = 0; i < param.Count(); i++)
+            T minValue = param.First();
+            foreach (var item in param)
             {
-                if (param[minIndex].CompareTo(param[i]) >= 0)
-                    minIndex = i;
+                if (minValue.CompareTo(item) >= 0)
+                    minValue = item;
             }
-            return param[minIndex];
+            return minValue;
         }
         /// <summary>
         /// Returns the smallest value.
         /// </summary>
         /// <param name="param">values.</param>
         /// <returns>Minimum value.</returns>
-        static public Time Min(params Time[] param)
+        static public Time Min(params Time[] param) => Min(param.AsEnumerable());
+        /// <summary>
+        /// Returns the smallest value.
+        /// </summary>
+        /// <param name="param">values.</param>
+        /// <returns>Minimum value.</returns>
+        static public Time Min(IEnumerable<Time> param)
         {
-            int minIndex = 0;
             if (param.Count() == 0)
                 return default;
-            for (int i = 0; i < param.Count(); i++)
+            Time minValue = param.First();
+            foreach (var item in param)
             {
-                if (param[minIndex] > param[i])
-                    minIndex = i;
+                if (minValue > item)
+                    minValue = item;
             }
-            return param[minIndex];
+            return minValue;
+        }
+        /// <summary>
+        /// Returns the biggest value.
+        /// </summary>
+        /// <param name="param">values.</param>
+        /// <returns>Maximum value.</returns>
+        static public Time Max(params Time[] param) => Max(param.AsEnumerable());
+        /// <summary>
+        /// Returns the biggest value.
+        /// </summary>
+        /// <param name="param">values.</param>
+        /// <returns>Maximum value.</returns>
+        static public Time Max(IEnumerable<Time> param)
+        {
+            if (param.Count() == 0)
+                return default;
+            Time maxValue = param.First();
+            foreach (var item in param)
+            {
+                if (maxValue < item)
+                    maxValue = item;
+            }
+            return maxValue;
         }
         /// <summary>
         /// Returns the biggest value.
@@ -162,48 +173,44 @@ namespace WGP
         /// <typeparam name="T">Type of the variables. Must be comparable.</typeparam>
         /// <param name="param">values.</param>
         /// <returns>Maximum value.</returns>
-        static public T Max<T>(params T[] param) where T : IComparable
-        {
-            int maxIndex = 0;
-            if (param.Count() == 0)
-                return default;
-            for (int i = 0; i < param.Count(); i++)
-            {
-                if (param[maxIndex].CompareTo(param[i]) <= 0)
-                    maxIndex = i;
-            }
-            return param[maxIndex];
-        }
+        static public T Max<T>(params T[] param) where T : IComparable => Max(param.AsEnumerable());
         /// <summary>
         /// Returns the biggest value.
         /// </summary>
+        /// <typeparam name="T">Type of the variables. Must be comparable.</typeparam>
         /// <param name="param">values.</param>
         /// <returns>Maximum value.</returns>
-        static public Time Max(params Time[] param)
+        static public T Max<T>(IEnumerable<T> param) where T : IComparable
         {
-            int maxIndex = 0;
             if (param.Count() == 0)
                 return default;
-            for (int i = 0; i < param.Count(); i++)
+            T maxValue = param.First();
+            foreach (var item in param)
             {
-                if (param[maxIndex] < param[i])
-                    maxIndex = i;
+                if (maxValue.CompareTo(item) <= 0)
+                    maxValue = item;
             }
-            return param[maxIndex];
+            return maxValue;
         }
+        /// <summary>
+        /// Creates a FloatRect from multiple coords. The resulting box will be able to contain all given coords.
+        /// </summary>
+        /// <param name="pts">Points.</param>
+        /// <returns>Resulting FloatRect.</returns>
+        static public FloatRect CreateRect(params Vector2f[] pts) => CreateRect(pts.AsEnumerable());
         /// <summary>
          /// Creates a FloatRect from multiple coords. The resulting box will be able to contain all given coords.
          /// </summary>
          /// <param name="pts">Points.</param>
          /// <returns>Resulting FloatRect.</returns>
-        static public FloatRect CreateRect(params Vector2f[] pts)
+        static public FloatRect CreateRect(IEnumerable<Vector2f> pts)
         {
             if (pts == null)
                 throw new ArgumentNullException("pts");
-            if (pts.Length == 0)
+            if (pts.Count() == 0)
                 throw new Exception("Too few vectors in the list.");
             FloatRect result = new FloatRect();
-            Vector2f min = pts[0], max = pts[0];
+            Vector2f min = pts.First(), max = pts.First();
             foreach (var item in pts)
             {
                 min.X = Min(min.X, item.X);

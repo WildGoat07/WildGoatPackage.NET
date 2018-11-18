@@ -106,7 +106,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RectangleHitbox.cs" />
     <Compile Include="Segment.cs" />
-    <Compile Include="SerializableTypes.cs" />
     <Compile Include="SubStream.cs" />
     <Compile Include="Utilities.cs" />
   </ItemGroup>
