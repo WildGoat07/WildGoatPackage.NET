@@ -13,11 +13,10 @@ namespace WGP
     public class Chronometer
     {
         private dynamic referenceTime;
-        private Time elapsed;
+        internal Time elapsed;
         private float speed;
         private bool paused;
-        private Time buffer;
-        private Time oldTime;
+        internal Time oldTime;
         /// <summary>
         /// If the chronometer is paused or not.
         /// </summary>
@@ -67,7 +66,14 @@ namespace WGP
             oldTime = Time.Zero;
             referenceTime = new Clock();
             elapsed = Time.Zero;
-            buffer = new Time();
+            speed = 1;
+        }
+        protected Chronometer(Clock clock)
+        {
+            paused = false;
+            oldTime = Time.Zero;
+            referenceTime = clock;
+            elapsed = Time.Zero;
             speed = 1;
         }
         /// <summary>
@@ -79,9 +85,9 @@ namespace WGP
             oldTime = timer.ElapsedTime;
             referenceTime = timer;
         }
-        private void Update()
+        protected virtual void Update()
         {
-            buffer = referenceTime.ElapsedTime - oldTime;
+            var buffer = referenceTime.ElapsedTime - oldTime;
             oldTime = referenceTime.ElapsedTime;
             if (!Paused)
                 elapsed += buffer * Speed;
