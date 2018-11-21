@@ -713,5 +713,15 @@ namespace WGP
             result.HalfExtend = rect.Size() / 2;
             return result;
         }
+
+        static public Angle To0_2PI(this Angle angle) => angle % Angle.Loop;
+        static public Angle ToMinusPI_PI(this Angle angle)
+        {
+            angle = angle.To0_2PI();
+            if (angle >= Angle.Loop / 2)
+                angle -= Angle.Loop;
+            return angle;
+        }
+        
     }
 }
