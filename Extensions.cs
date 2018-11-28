@@ -23,6 +23,7 @@ namespace WGP
                 throw new Exception("Can't compute an interpolation from the given types.");
             }
         }
+
         /// <summary>
         /// Returns an interpolation.
         /// </summary>
@@ -35,6 +36,7 @@ namespace WGP
         {
             return InterpolationD(fct, percent, min, max);
         }
+
         /// <summary>
         /// Returns the length squared of a vector.
         /// </summary>
@@ -44,6 +46,7 @@ namespace WGP
         {
             return vector.X * vector.X + vector.Y * vector.Y;
         }
+
         /// <summary>
         /// Returns the length of a vector.
         /// </summary>
@@ -53,6 +56,7 @@ namespace WGP
         {
             return (float)Math.Sqrt(LengthSquared(vector));
         }
+
         /// <summary>
         /// Returns the length of a vector.
         /// </summary>
@@ -63,6 +67,7 @@ namespace WGP
         {
             return vector.GetAngle().GenerateVector(length);
         }
+
         /// <summary>
         /// Normalize a vector.
         /// </summary>
@@ -75,6 +80,7 @@ namespace WGP
                 return default;
             return vector / l;
         }
+
         /// <summary>
         /// Returns the angle of the vector.
         /// </summary>
@@ -84,16 +90,18 @@ namespace WGP
         {
             return Angle.FromRadians((float)Math.Atan2(vector.Y, vector.X));
         }
+
         /// <summary>
         /// Sets the angle of the vector.
         /// </summary>
         /// <param name="vector">Vector.</param>
         /// <param name="angle">Angle of the vector.</param>
         /// <returns>Angle.</returns>
-        static public Vector2f SetAngle( this Vector2f vector, Angle angle)
+        static public Vector2f SetAngle(this Vector2f vector, Angle angle)
         {
             return angle.GenerateVector(vector.GetLength());
         }
+
         /// <summary>
         /// Sets the angle of the vector.
         /// </summary>
@@ -104,6 +112,7 @@ namespace WGP
         {
             return angle.RotateVector(vector);
         }
+
         /// <summary>
         /// Returns the intersection between two lines.
         /// </summary>
@@ -118,8 +127,10 @@ namespace WGP
             float t = (line2.Position - line1.Position).CrossProduct(line2.Direction) / line1.Direction.CrossProduct(line2.Direction);
             return line1.GetPoint(t);
         }
+
         /// <summary>
-        /// Test the collision between two lines. Test also the collision if one or both of the lines are segments.
+        /// Test the collision between two lines. Test also the collision if one or both of the lines
+        /// are segments.
         /// </summary>
         /// <param name="line1">First line.</param>
         /// <param name="line2">econd line.</param>
@@ -157,6 +168,7 @@ namespace WGP
             else
                 return true;
         }
+
         /// <summary>
         /// Returns the cross product of two vectors.
         /// </summary>
@@ -167,6 +179,7 @@ namespace WGP
         {
             return vec1.X * vec2.Y - vec1.Y * vec2.X;
         }
+
         /// <summary>
         /// Returns the dot product of two vectors.
         /// </summary>
@@ -177,8 +190,11 @@ namespace WGP
         {
             return vec1.X * vec2.X + vec1.Y * vec2.Y;
         }
+
         /// <summary>
-        /// Tests if <paramref name="value"/> is in the [<paramref name="min"/> , <paramref name="max"/>] range. <paramref name="min"/> and <paramref name="max"/> are included in the range.
+        /// Tests if <paramref name="value"/> is in the [ <paramref name="min"/> , <paramref
+        /// name="max"/>] range. <paramref name="min"/> and <paramref name="max"/> are included in
+        /// the range.
         /// </summary>
         /// <typeparam name="T">Type of the variable. Must be comparable.</typeparam>
         /// <param name="value">Value to compare.</param>
@@ -189,6 +205,7 @@ namespace WGP
         {
             return value.CompareTo(min) >= 0 && value.CompareTo(max) <= 0;
         }
+
         /// <summary>
         /// Cap the value between a maximum and a minimum value.
         /// </summary>
@@ -201,8 +218,11 @@ namespace WGP
         {
             return Utilities.Max(min, Utilities.Min(max, value));
         }
+
         /// <summary>
-        /// Tests if <paramref name="value"/> is in the [<paramref name="min"/> , <paramref name="max"/>] range. <paramref name="min"/> and <paramref name="max"/> are included in the range.
+        /// Tests if <paramref name="value"/> is in the [ <paramref name="min"/> , <paramref
+        /// name="max"/>] range. <paramref name="min"/> and <paramref name="max"/> are included in
+        /// the range.
         /// </summary>
         /// <param name="value">Value to compare.</param>
         /// <param name="min">Minimum value of the range.</param>
@@ -212,6 +232,7 @@ namespace WGP
         {
             return value >= min && value <= max;
         }
+
         /// <summary>
         /// Cap the value between a maximum and a minimum value.
         /// </summary>
@@ -223,7 +244,9 @@ namespace WGP
         {
             return Utilities.Max(min, Utilities.Min(max, value));
         }
+
         #region Stream . Write / Read base type
+
         /// <summary>
         /// Reads a base type and returns it.
         /// </summary>
@@ -235,6 +258,7 @@ namespace WGP
             stream.Read(bytes, 0, bytes.Length);
             return BitConverter.ToInt16(bytes, 0);
         }
+
         /// <summary>
         /// Reads a base type and returns it.
         /// </summary>
@@ -246,6 +270,7 @@ namespace WGP
             stream.Read(bytes, 0, bytes.Length);
             return BitConverter.ToInt32(bytes, 0);
         }
+
         /// <summary>
         /// Reads a base type and returns it.
         /// </summary>
@@ -257,6 +282,7 @@ namespace WGP
             stream.Read(bytes, 0, bytes.Length);
             return BitConverter.ToInt64(bytes, 0);
         }
+
         /// <summary>
         /// Reads a base type and returns it.
         /// </summary>
@@ -268,6 +294,7 @@ namespace WGP
             stream.Read(bytes, 0, bytes.Length);
             return BitConverter.ToUInt16(bytes, 0);
         }
+
         /// <summary>
         /// Reads a base type and returns it.
         /// </summary>
@@ -279,6 +306,7 @@ namespace WGP
             stream.Read(bytes, 0, bytes.Length);
             return BitConverter.ToUInt32(bytes, 0);
         }
+
         /// <summary>
         /// Reads a base type and returns it.
         /// </summary>
@@ -290,6 +318,7 @@ namespace WGP
             stream.Read(bytes, 0, bytes.Length);
             return BitConverter.ToUInt64(bytes, 0);
         }
+
         /// <summary>
         /// Reads a base type and returns it.
         /// </summary>
@@ -301,6 +330,7 @@ namespace WGP
             stream.Read(bytes, 0, bytes.Length);
             return BitConverter.ToChar(bytes, 0);
         }
+
         /// <summary>
         /// Reads a base type and returns it.
         /// </summary>
@@ -312,6 +342,7 @@ namespace WGP
             stream.Read(bytes, 0, bytes.Length);
             return BitConverter.ToSingle(bytes, 0);
         }
+
         /// <summary>
         /// Reads a base type and returns it.
         /// </summary>
@@ -323,6 +354,7 @@ namespace WGP
             stream.Read(bytes, 0, bytes.Length);
             return BitConverter.ToDouble(bytes, 0);
         }
+
         /// <summary>
         /// Reads a base type and returns it.
         /// </summary>
@@ -334,6 +366,7 @@ namespace WGP
             stream.Read(bytes, 0, bytes.Length);
             return BitConverter.ToBoolean(bytes, 0);
         }
+
         /// <summary>
         /// Reads a base type and returns it.
         /// </summary>
@@ -345,6 +378,7 @@ namespace WGP
             stream.Read(bytes, 0, bytes.Length);
             return (SByte)bytes[0];
         }
+
         /// <summary>
         /// Reads a base type and returns it.
         /// </summary>
@@ -356,6 +390,7 @@ namespace WGP
             stream.Read(bytes, 0, bytes.Length);
             return bytes[0];
         }
+
         /// <summary>
         /// Reads a string (Unicode) and returns it.
         /// </summary>
@@ -363,6 +398,7 @@ namespace WGP
         /// <param name="nbChars">Number of characters to read.</param>
         /// <returns>String read.</returns>
         static public String ReadString(this System.IO.Stream stream, uint nbChars) => ReadString(stream, nbChars, Encoding.Unicode);
+
         /// <summary>
         /// Reads a string (Unicode) and returns it.
         /// </summary>
@@ -376,6 +412,7 @@ namespace WGP
             stream.Read(bytes, 0, bytes.Length);
             return encoding.GetString(bytes);
         }
+
         /// <summary>
         /// Write a base type.
         /// </summary>
@@ -387,6 +424,7 @@ namespace WGP
             bytes[0] = (byte)value;
             stream.Write(bytes, 0, bytes.Length);
         }
+
         /// <summary>
         /// Write a base type.
         /// </summary>
@@ -397,6 +435,7 @@ namespace WGP
             var bytes = BitConverter.GetBytes(value);
             stream.Write(bytes, 0, bytes.Length);
         }
+
         /// <summary>
         /// Write a base type.
         /// </summary>
@@ -407,6 +446,7 @@ namespace WGP
             var bytes = BitConverter.GetBytes(value);
             stream.Write(bytes, 0, bytes.Length);
         }
+
         /// <summary>
         /// Write a base type.
         /// </summary>
@@ -417,6 +457,7 @@ namespace WGP
             var bytes = BitConverter.GetBytes(value);
             stream.Write(bytes, 0, bytes.Length);
         }
+
         /// <summary>
         /// Write a base type.
         /// </summary>
@@ -428,6 +469,7 @@ namespace WGP
             bytes[0] = value;
             stream.Write(bytes, 0, bytes.Length);
         }
+
         /// <summary>
         /// Write a base type.
         /// </summary>
@@ -438,6 +480,7 @@ namespace WGP
             var bytes = BitConverter.GetBytes(value);
             stream.Write(bytes, 0, bytes.Length);
         }
+
         /// <summary>
         /// Write a base type.
         /// </summary>
@@ -448,6 +491,7 @@ namespace WGP
             var bytes = BitConverter.GetBytes(value);
             stream.Write(bytes, 0, bytes.Length);
         }
+
         /// <summary>
         /// Write a base type.
         /// </summary>
@@ -458,6 +502,7 @@ namespace WGP
             var bytes = BitConverter.GetBytes(value);
             stream.Write(bytes, 0, bytes.Length);
         }
+
         /// <summary>
         /// Write a base type.
         /// </summary>
@@ -468,6 +513,7 @@ namespace WGP
             var bytes = BitConverter.GetBytes(value);
             stream.Write(bytes, 0, bytes.Length);
         }
+
         /// <summary>
         /// Write a base type.
         /// </summary>
@@ -478,6 +524,7 @@ namespace WGP
             var bytes = BitConverter.GetBytes(value);
             stream.Write(bytes, 0, bytes.Length);
         }
+
         /// <summary>
         /// Write a base type.
         /// </summary>
@@ -488,6 +535,7 @@ namespace WGP
             var bytes = BitConverter.GetBytes(value);
             stream.Write(bytes, 0, bytes.Length);
         }
+
         /// <summary>
         /// Write a base type.
         /// </summary>
@@ -498,12 +546,14 @@ namespace WGP
             var bytes = BitConverter.GetBytes(value);
             stream.Write(bytes, 0, bytes.Length);
         }
+
         /// <summary>
         /// Write a base type.
         /// </summary>
         /// <param name="stream">Output stream.</param>
         /// <param name="value">Base type to write.</param>
         static public void WriteString(this System.IO.Stream stream, String value) => WriteString(stream, value, Encoding.Unicode);
+
         /// <summary>
         /// Write a base type.
         /// </summary>
@@ -515,93 +565,111 @@ namespace WGP
             var bytes = encoding.GetBytes(value);
             stream.Write(bytes, 0, bytes.Length);
         }
-        #endregion
+
+        #endregion Stream . Write / Read base type
+
         #region Rect operations
+
         /// <summary>
         /// Returns the top left point of the rect.
         /// </summary>
         /// <param name="rect">AABB.</param>
         /// <returns>Top left point.</returns>
         static public Vector2f TopLeft(this FloatRect rect) => new Vector2f(rect.Left, rect.Top);
+
         /// <summary>
         /// Returns the top right point of the rect.
         /// </summary>
         /// <param name="rect">AABB.</param>
         /// <returns>Top right point.</returns>
         static public Vector2f TopRight(this FloatRect rect) => new Vector2f(rect.Left + rect.Width, rect.Top);
+
         /// <summary>
         /// Returns the bottom left point of the rect.
         /// </summary>
         /// <param name="rect">AABB.</param>
         /// <returns>Bottom left point.</returns>
         static public Vector2f BotLeft(this FloatRect rect) => new Vector2f(rect.Left, rect.Top + rect.Height);
+
         /// <summary>
         /// Returns the bottom right point of the rect.
         /// </summary>
         /// <param name="rect">AABB.</param>
         /// <returns>Bottom right point.</returns>
         static public Vector2f BotRight(this FloatRect rect) => new Vector2f(rect.Left + rect.Width, rect.Top + rect.Height);
+
         /// <summary>
         /// Returns the size of the rect.
         /// </summary>
         /// <param name="rect">AABB.</param>
         /// <returns>Size of the rect.</returns>
         static public Vector2f Size(this FloatRect rect) => new Vector2f(rect.Width, rect.Height);
+
         /// <summary>
         /// Returns the bot value of the rect.
         /// </summary>
         /// <param name="rect">AABB.</param>
         /// <returns>Bot of the rect.</returns>
         static public float Bot(this FloatRect rect) => rect.Top + rect.Height;
+
         /// <summary>
         /// Returns the right value of the rect.
         /// </summary>
         /// <param name="rect">AABB.</param>
         /// <returns>Right of the rect.</returns>
         static public float Right(this FloatRect rect) => rect.Left + rect.Width;
+
         /// <summary>
         /// Returns the top left point of the rect.
         /// </summary>
         /// <param name="rect">AABB.</param>
         /// <returns>Top left point.</returns>
         static public Vector2i TopLeft(this IntRect rect) => new Vector2i(rect.Left, rect.Top);
+
         /// <summary>
         /// Returns the top right point of the rect.
         /// </summary>
         /// <param name="rect">AABB.</param>
         /// <returns>Top right point.</returns>
         static public Vector2i TopRight(this IntRect rect) => new Vector2i(rect.Left + rect.Width, rect.Top);
+
         /// <summary>
         /// Returns the bottom left point of the rect.
         /// </summary>
         /// <param name="rect">AABB.</param>
         /// <returns>Bottom left point.</returns>
         static public Vector2i BotLeft(this IntRect rect) => new Vector2i(rect.Left, rect.Top + rect.Height);
+
         /// <summary>
         /// Returns the bottom right point of the rect.
         /// </summary>
         /// <param name="rect">AABB.</param>
         /// <returns>Bottom right point.</returns>
         static public Vector2i BotRight(this IntRect rect) => new Vector2i(rect.Left + rect.Width, rect.Top + rect.Height);
+
         /// <summary>
         /// Returns the size of the rect.
         /// </summary>
         /// <param name="rect">AABB.</param>
         /// <returns>Size of the rect.</returns>
         static public Vector2i Size(this IntRect rect) => new Vector2i(rect.Width, rect.Height);
+
         /// <summary>
         /// Returns the bot value of the rect.
         /// </summary>
         /// <param name="rect">AABB.</param>
         /// <returns>Bot of the rect.</returns>
         static public int Bot(this IntRect rect) => rect.Top + rect.Height;
+
         /// <summary>
         /// Returns the right value of the rect.
         /// </summary>
         /// <param name="rect">AABB.</param>
         /// <returns>Right of the rect.</returns>
         static public int Right(this IntRect rect) => rect.Left + rect.Width;
-        #endregion
+
+        #endregion Rect operations
+
         /// <summary>
         /// Returns a random float between two values.
         /// </summary>
@@ -613,94 +681,113 @@ namespace WGP
         {
             return (float)(randGen.NextDouble() * (max - min) + min);
         }
+
         /// <summary>
         /// Converts the TimeSpan to a SFML Time.
         /// </summary>
         /// <param name="t">TimeSpan to converts.</param>
         /// <returns>The resulting Time.</returns>
         static public Time ToSFML(this TimeSpan t) => Time.FromMicroseconds(t.Ticks / 10);
+
         /// <summary>
         /// Converts the SFML Time to a TimeSpan.
         /// </summary>
         /// <param name="t">Time to converts.</param>
         /// <returns>The resulting TimeSpan.</returns>
         static public TimeSpan ToSystem(this Time t) => TimeSpan.FromTicks(t.AsMicroseconds() * 10);
+
         #region VecOnly?
+
         /// <summary>
         /// Returns a vector with the Y axis set to 0.
         /// </summary>
         /// <param name="vec">Vector to extract the X axis.</param>
         /// <returns>The vector without the Y axis.</returns>
         static public Vector2f OnlyX(this Vector2f vec) => new Vector2f(vec.X, 0);
+
         /// <summary>
         /// Returns a vector with the X axis set to 0.
         /// </summary>
         /// <param name="vec">Vector to extract the Y axis.</param>
         /// <returns>The vector without the X axis.</returns>
         static public Vector2f OnlyY(this Vector2f vec) => new Vector2f(0, vec.Y);
+
         /// <summary>
         /// Returns a vector with the Y axis set to 0.
         /// </summary>
         /// <param name="vec">Vector to extract the X axis.</param>
         /// <returns>The vector without the Y axis.</returns>
         static public Vector2u OnlyX(this Vector2u vec) => new Vector2u(vec.X, 0);
+
         /// <summary>
         /// Returns a vector with the X axis set to 0.
         /// </summary>
         /// <param name="vec">Vector to extract the Y axis.</param>
         /// <returns>The vector without the X axis.</returns>
         static public Vector2u OnlyY(this Vector2u vec) => new Vector2u(0, vec.Y);
+
         /// <summary>
         /// Returns a vector with the Y axis set to 0.
         /// </summary>
         /// <param name="vec">Vector to extract the X axis.</param>
         /// <returns>The vector without the Y axis.</returns>
         static public Vector2i OnlyX(this Vector2i vec) => new Vector2i(vec.X, 0);
+
         /// <summary>
         /// Returns a vector with the X axis set to 0.
         /// </summary>
         /// <param name="vec">Vector to extract the Y axis.</param>
         /// <returns>The vector without the X axis.</returns>
         static public Vector2i OnlyY(this Vector2i vec) => new Vector2i(0, vec.Y);
-        #endregion
+
+        #endregion VecOnly?
+
         #region Abs
+
         /// <summary>
         /// Returns the absolute value.
         /// </summary>
         /// <param name="nb">Base number.</param>
         /// <returns>Absolute value.</returns>
         static public Double Abs(this Double nb) => Math.Abs(nb);
+
         /// <summary>
         /// Returns the absolute value.
         /// </summary>
         /// <param name="nb">Base number.</param>
         /// <returns>Absolute value.</returns>
         static public SByte Abs(this SByte nb) => Math.Abs(nb);
+
         /// <summary>
         /// Returns the absolute value.
         /// </summary>
         /// <param name="nb">Base number.</param>
         /// <returns>Absolute value.</returns>
         static public Int16 Abs(this Int16 nb) => Math.Abs(nb);
+
         /// <summary>
         /// Returns the absolute value.
         /// </summary>
         /// <param name="nb">Base number.</param>
         /// <returns>Absolute value.</returns>
         static public Int32 Abs(this Int32 nb) => Math.Abs(nb);
+
         /// <summary>
         /// Returns the absolute value.
         /// </summary>
         /// <param name="nb">Base number.</param>
         /// <returns>Absolute value.</returns>
         static public Int64 Abs(this Int64 nb) => Math.Abs(nb);
+
         /// <summary>
         /// Returns the absolute value.
         /// </summary>
         /// <param name="nb">Base number.</param>
         /// <returns>Absolute value.</returns>
         static public Single Abs(this Single nb) => Math.Abs(nb);
-        #endregion
+
+        #endregion Abs
+
         /// <summary>
         /// Creates a hitbox from a Floatrect.
         /// </summary>
@@ -714,7 +801,18 @@ namespace WGP
             return result;
         }
 
+        /// <summary>
+        /// Returns the angle in a [0;2PI[ space.
+        /// </summary>
+        /// <param name="angle"></param>
+        /// <returns>Angle in [0;2PI[ space.</returns>
         static public Angle To0_2PI(this Angle angle) => angle % Angle.Loop;
+
+        /// <summary>
+        /// Returns the angle in a [-PI;+PI[ space.
+        /// </summary>
+        /// <param name="angle"></param>
+        /// <returns>Angle in [-PI;+PI[ space.</returns>
         static public Angle ToMinusPI_PI(this Angle angle)
         {
             angle = angle.To0_2PI();
@@ -722,6 +820,46 @@ namespace WGP
                 angle -= Angle.Loop;
             return angle;
         }
-        
+
+        /// <summary>
+        /// Tries to find the value.
+        /// </summary>
+        /// <typeparam name="T">Type of the value.</typeparam>
+        /// <param name="info"></param>
+        /// <param name="name">Name of the value.</param>
+        /// <returns>The value or default if none was found.</returns>
+        static public T TryGetValue<T>(this System.Runtime.Serialization.SerializationInfo info, string name)
+        {
+            try
+            {
+                return (T)info.GetValue(name, typeof(T));
+            }
+            catch (Exception)
+            {
+                return default;
+            }
+        }
+
+        /// <summary>
+        /// Tries to find the value.
+        /// </summary>
+        /// <typeparam name="T">Type of the value.</typeparam>
+        /// <param name="info"></param>
+        /// <param name="name">Name of the value.</param>
+        /// <param name="result">The value or default if none was found.</param>
+        /// <returns>True if successful, false otherwise.</returns>
+        static public bool TryGetValue<T>(this System.Runtime.Serialization.SerializationInfo info, string name, out T result)
+        {
+            try
+            {
+                result = (T)info.GetValue(name, typeof(T));
+                return true;
+            }
+            catch (Exception)
+            {
+                result = default;
+                return false;
+            }
+        }
     }
 }
