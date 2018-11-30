@@ -10,18 +10,21 @@ namespace WGP
     /// <summary>
     /// Angle class. Used for angle conversions.
     /// </summary>
+    [Serializable]
     public struct Angle : IComparable, IComparable<Angle>, IEquatable<Angle>, IFormattable, ISerializable, ICloneable
     {
         /// <summary>
         /// Angle corresponing to 0 degrees or 0 radians.
         /// </summary>
         static public Angle Zero => FromRadians(0);
+
         /// <summary>
         /// Angle corresponing to 360 degrees or 2PI radians.
         /// </summary>
         static public Angle Loop => FromRadians(2 * (float)Math.PI);
 
         private float radian;
+
         /// <summary>
         /// Angle in degrees.
         /// </summary>
@@ -30,6 +33,7 @@ namespace WGP
             get => radian * 180 / (float)Math.PI;
             set => radian = value * (float)Math.PI / 180;
         }
+
         /// <summary>
         /// Angle in radians.
         /// </summary>
@@ -38,6 +42,7 @@ namespace WGP
             get => radian;
             set => radian = value;
         }
+
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -53,6 +58,7 @@ namespace WGP
             tr.Rotate(Degree);
             return tr.TransformPoint(vector);
         }
+
         /// <summary>
         /// Returns the rotated vector corresponding to the angle.
         /// </summary>
@@ -163,58 +169,72 @@ namespace WGP
         {
             return FromRadians(left.radian + right.radian);
         }
+
         static public Angle operator -(Angle left, Angle right)
         {
             return FromRadians(left.radian - right.radian);
         }
+
         static public Angle operator -(Angle angle)
         {
             return FromRadians(-angle.radian);
         }
+
         static public Angle operator *(Angle angle, float value)
         {
             return FromRadians(angle.radian * value);
         }
+
         static public Angle operator /(Angle angle, float value)
         {
             return FromRadians(angle.radian / value);
         }
+
         static public Angle operator *(float value, Angle angle)
         {
             return FromRadians(angle.radian * value);
         }
+
         static public Angle operator /(float value, Angle angle)
         {
             return FromRadians(value / angle.radian);
         }
+
         static public float operator /(Angle left, Angle right)
         {
             return left.radian / right.radian;
         }
+
         static public Angle operator %(Angle left, Angle right)
         {
             return FromRadians(left.radian % right.radian);
         }
+
         static public bool operator <(Angle left, Angle right)
         {
             return left.CompareTo(right) < 0;
         }
+
         static public bool operator >(Angle left, Angle right)
         {
             return left.CompareTo(right) > 0;
         }
+
         static public bool operator ==(Angle left, Angle right)
         {
             return left.Equals(right);
         }
+
         static public bool operator !=(Angle left, Angle right)
         {
             return !left.Equals(right);
         }
+
         static public bool operator <=(Angle left, Angle right)
         {
             return left.CompareTo(right) <= 0;
         }
+
         static public bool operator >=(Angle left, Angle right)
         {
             return left.CompareTo(right) >= 0;
