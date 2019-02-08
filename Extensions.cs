@@ -163,19 +163,6 @@ namespace WGP
         }
 
         /// <summary>
-        /// Creates a hitbox from a Floatrect.
-        /// </summary>
-        /// <param name="rect">AABB.</param>
-        /// <returns>Hitbox.</returns>
-        static public RectangleHitbox CreateHitbox(this FloatRect rect)
-        {
-            RectangleHitbox result = new RectangleHitbox();
-            result.Position = rect.TopLeft() + rect.Size() / 2;
-            result.HalfExtend = rect.Size() / 2;
-            return result;
-        }
-
-        /// <summary>
         /// Returns the cross product of two vectors.
         /// </summary>
         /// <param name="vec1">First vector.</param>
