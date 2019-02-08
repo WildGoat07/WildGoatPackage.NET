@@ -12,9 +12,15 @@ namespace WGP
     /// </summary>
     public class AdvancedMemoryStream : Stream
     {
-        private List<byte> data;
+        #region Private Fields
+
         private long _position;
+        private List<byte> data;
         private bool disposed;
+
+        #endregion Private Fields
+
+        #region Public Constructors
 
         /// <summary>
         /// Constructor.
@@ -25,6 +31,7 @@ namespace WGP
             data = new List<byte>();
             disposed = false;
         }
+
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -33,6 +40,7 @@ namespace WGP
         {
             SetLength(size);
         }
+
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -41,6 +49,10 @@ namespace WGP
         {
             data = new List<byte>(bytes);
         }
+
+        #endregion Public Constructors
+
+        #region Public Properties
 
         public override bool CanRead => true;
 
@@ -74,7 +86,38 @@ namespace WGP
             }
         }
 
-        public override void Flush() { }
+        #endregion Public Properties
+
+        #region Public Methods
+
+        public override void Flush()
+        {
+        }
+
+        /// <summary>
+        /// Insert a chunk of data in the memory.
+        /// </summary>
+        /// <param name="buffer">Data to insert.</param>
+        /// <param name="offset">Position in the buffer to which the insertion begins.</param>
+        /// <param name="count">The number of byte to insert.</param>
+        public void Insert(byte[] buffer, int offset, int count)
+        {
+            if (disposed)
+                throw new ObjectDisposedException(ToString());
+            if (buffer == null)
+                throw new ArgumentNullException();
+            if (buffer.Length < offset + count)
+                throw new ArgumentException();
+            if (offset < 0 || count < 0)
+                throw new IndexOutOfRangeException();
+            if (count == 0)
+                return;
+            for (int i = offset; i < offset + count; i++)
+            {
+                data.Insert((int)Position, buffer[i]);
+                Position++;
+            }
+        }
 
         public override int Read(byte[] buffer, int offset, int count)
         {
@@ -94,6 +137,21 @@ namespace WGP
             return count;
         }
 
+        /// <summary>
+        /// Remove a portion of the memory.
+        /// </summary>
+        /// <param name="count">Number of bytes to remove.</param>
+        public void Remove(int count)
+        {
+            if (disposed)
+                throw new ObjectDisposedException(ToString());
+            if (count > Length - Position)
+                throw new ArgumentException();
+            data.RemoveRange((int)Position, count);
+            if (Position == Length)
+                Position--;
+        }
+
         public override long Seek(long offset, SeekOrigin origin)
         {
             if (disposed)
@@ -103,9 +161,11 @@ namespace WGP
                 case SeekOrigin.Begin:
                     Position = offset;
                     break;
+
                 case SeekOrigin.Current:
                     Position += offset;
                     break;
+
                 case SeekOrigin.End:
                     Position = Length + offset;
                     break;
@@ -155,46 +215,11 @@ namespace WGP
                 data.AddRange(add);
                 Position += addCount;
             }
+        }
 
-        }
-        /// <summary>
-        /// Insert a chunk of data in the memory.
-        /// </summary>
-        /// <param name="buffer">Data to insert.</param>
-        /// <param name="offset">Position in the buffer to which the insertion begins.</param>
-        /// <param name="count">The number of byte to insert.</param>
-        public void Insert(byte[] buffer, int offset, int count)
-        {
-            if (disposed)
-                throw new ObjectDisposedException(ToString());
-            if (buffer == null)
-                throw new ArgumentNullException();
-            if (buffer.Length < offset + count)
-                throw new ArgumentException();
-            if (offset < 0 || count < 0)
-                throw new IndexOutOfRangeException();
-            if (count == 0)
-                return;
-            for (int i = offset;i<offset + count;i++)
-            {
-                data.Insert((int)Position, buffer[i]);
-                Position++;
-            }
-        }
-        /// <summary>
-        /// Remove a portion of the memory.
-        /// </summary>
-        /// <param name="count">Number of bytes to remove.</param>
-        public void Remove(int count)
-        {
-            if (disposed)
-                throw new ObjectDisposedException(ToString());
-            if (count > Length - Position)
-                throw new ArgumentException();
-            data.RemoveRange((int)Position, count);
-            if (Position == Length)
-                Position--;
-        }
+        #endregion Public Methods
+
+        #region Protected Methods
 
         protected override void Dispose(bool disposing)
         {
@@ -207,5 +232,7 @@ namespace WGP
             disposed = true;
             base.Dispose(disposing);
         }
+
+        #endregion Protected Methods
     }
 }
