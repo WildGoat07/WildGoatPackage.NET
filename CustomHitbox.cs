@@ -11,29 +11,41 @@ namespace WGP
     /// <summary>
     /// A custom shape for a hitbox. Can be convex or concave.
     /// </summary>
-    public class CustomHitbox : Transformable, IHitbox
+    public class CustomHitbox : SingleShapeHitbox
     {
-        public IEnumerable<Vector2f> Vertices
-        {
-            get
-            {
-                var result = new Vector2f[CustomShape.Count];
-                int index = 0;
-                foreach (var pt in CustomShape)
-                {
-                    result[index] = Transform.TransformPoint(pt);
-                    index++;
-                }
-                return result;
-            }
-        }
-        /// <summary>
-        /// List of points composing the shape. DO NOT USE THE "Vertices" PROPERTY !
-        /// </summary>
-        public List<Vector2f> CustomShape { get; set; }
+        #region Public Constructors
+
         /// <summary>
         /// Constructor.
         /// </summary>
-        public CustomHitbox() { CustomShape = new List<Vector2f>(); }
+        public CustomHitbox() : base()
+        {
+            Vertices.Add(new Tuple<List<Vector2f>, CombineMode>(new List<Vector2f>(), CombineMode.ADD));
+        }
+
+        /// <summary>
+        /// Copy constructor.
+        /// </summary>
+        /// <param name="copy"></param>
+        public CustomHitbox(CustomHitbox copy) : base(copy)
+        {
+        }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        /// <summary>
+        /// List of points composing the shape.
+        /// </summary>
+        public List<Vector2f> Shape => Vertices.First().Item1;
+
+        #endregion Public Properties
+
+        #region Public Methods
+
+        public override object Clone() => new CustomHitbox(this);
+
+        #endregion Public Methods
     }
 }
