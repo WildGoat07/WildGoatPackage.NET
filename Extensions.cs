@@ -251,7 +251,8 @@ namespace WGP
         /// <remarks>The returned value is set to default if there is no collision.</remarks>
         static public Vector2f Intersection(this Line line1, Line line2)
         {
-            if (!line1.Collision(line2))
+            if (line1.Direction.CrossProduct(line2.Direction) == 0 &&
+                (line2.Position - line1.Position).CrossProduct(line2.Direction) == 0)
                 return default;
             float t = (line2.Position - line1.Position).CrossProduct(line2.Direction) / line1.Direction.CrossProduct(line2.Direction);
             return line1.GetPoint(t);
