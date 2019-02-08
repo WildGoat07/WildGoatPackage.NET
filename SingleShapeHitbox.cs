@@ -31,7 +31,7 @@ namespace WGP
         #region Public Properties
 
         /// <summary>
-        /// An ordered list of points describing the shape of the hitbox.
+        /// An ordered list of points describing the shape of the hitbox. Read only.
         /// </summary>
         public SFML.System.Vector2f[] Points => Vertices.Count > 0 ? TransformHitbox().Vertices.First().Item1.ToArray() : null;
 
