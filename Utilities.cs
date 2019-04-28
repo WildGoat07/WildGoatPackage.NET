@@ -96,10 +96,11 @@ namespace WGP
         /// <param name="percent">Percent. Must be between [0,1].</param>
         /// <param name="min">Minimal value.</param>
         /// <param name="max">Maximal value.</param>
+        /// <param name="capped">True if the value must be capped.</param>
         /// <returns>Interpolation.</returns>
-        public static T Interpolation<T>(float percent, T min, T max)
+        public static T Interpolation<T>(float percent, T min, T max, bool capped = false)
         {
-            return InterpolationD(percent, min, max);
+            return InterpolationD(percent, min, max, capped);
         }
 
         /// <summary>
@@ -108,10 +109,14 @@ namespace WGP
         /// <param name="percent">Percent. Must be between [0,1].</param>
         /// <param name="min">Minimal value.</param>
         /// <param name="max">Maximal value.</param>
+        /// <param name="capped">True if the value must be capped.</param>
         /// <returns>Interpolation.</returns>
-        public static Time Interpolation(float percent, Time min, Time max)
+        public static Time Interpolation(float percent, Time min, Time max, bool capped = false)
         {
-            return percent * (max - min) + min;
+            if (capped)
+                return (percent * (max - min) + min).Capped(min, max);
+            else
+                return percent * (max - min) + min;
         }
 
         /// <summary>
@@ -224,10 +229,11 @@ namespace WGP
         /// <param name="value">Reference value.</param>
         /// <param name="min">Minmal value.</param>
         /// <param name="max">Maximal value.</param>
+        /// <param name="capped">True if the value must be capped.</param>
         /// <returns>Percentage.</returns>
-        public static float Percent<T>(T value, T min, T max)
+        public static float Percent<T>(T value, T min, T max, bool capped = true)
         {
-            return PercentD(value, min, max);
+            return PercentD(value, min, max, capped);
         }
 
         /// <summary>
@@ -236,21 +242,28 @@ namespace WGP
         /// <param name="value">Reference value.</param>
         /// <param name="min">Minmal value.</param>
         /// <param name="max">Maximal value.</param>
+        /// <param name="capped">True if the value must be capped.</param>
         /// <returns>Percentage.</returns>
-        public static float Percent(Time value, Time min, Time max)
+        public static float Percent(Time value, Time min, Time max, bool capped = true)
         {
-            return ((value.AsSeconds() - min.AsSeconds()) / (max.AsSeconds() - min.AsSeconds())).Capped(0, 1);
+            if (capped)
+                return ((value.AsSeconds() - min.AsSeconds()) / (max.AsSeconds() - min.AsSeconds())).Capped(0, 1);
+            else
+                return (value.AsSeconds() - min.AsSeconds()) / (max.AsSeconds() - min.AsSeconds());
         }
 
         #endregion Public Methods
 
         #region Private Methods
 
-        private static dynamic InterpolationD(float percent, dynamic min, dynamic max)
+        private static dynamic InterpolationD(float percent, dynamic min, dynamic max, bool capped)
         {
             try
             {
-                return percent * (max - min) + min;
+                if (capped)
+                    return (percent * (max - min) + min).Capped(min, max);
+                else
+                    return percent * (max - min) + min;
             }
             catch (Exception)
             {
@@ -258,17 +271,23 @@ namespace WGP
             }
         }
 
-        private static float PercentD(dynamic value, dynamic min, dynamic max)
+        private static float PercentD(dynamic value, dynamic min, dynamic max, bool capped)
         {
             try
             {
-                return ((float)(value - min) / (float)(max - min)).Capped(0, 1);
+                if (capped)
+                    return ((float)(value - min) / (float)(max - min)).Capped(0, 1);
+                else
+                    return (float)(value - min) / (float)(max - min);
             }
             catch (Exception)
             {
                 try
                 {
-                    return ((value - min) / (max - min)).Capped(0, 1);
+                    if (capped)
+                        return ((value - min) / (max - min)).Capped(0, 1);
+                    else
+                        return (value - min) / (max - min);
                 }
                 catch (Exception)
                 {
