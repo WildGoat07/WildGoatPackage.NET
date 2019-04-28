@@ -8,6 +8,9 @@ using SFML.System;
 
 namespace WGP
 {
+    /// <summary>
+    /// Set of extension methods.
+    /// </summary>
     static public partial class Extensions
     {
         #region Public Methods

@@ -8,6 +8,9 @@ using SFML.System;
 
 namespace WGP
 {
+    /// <summary>
+    /// Set of utiliy methods.
+    /// </summary>
     public static partial class Utilities
     {
         #region Public Methods
