@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace WGP
 {
@@ -32,7 +33,7 @@ namespace WGP
         /// <summary>
         /// Angle corresponing to 360 degrees or 2PI radians.
         /// </summary>
-        static public Angle Loop => FromRadians(2 * (float)Math.PI);
+        static public Angle Loop => FromRadians(2 * Math.PI);
 
         /// <summary>
         /// Angle corresponing to 0 degrees or 0 radians.
@@ -42,16 +43,16 @@ namespace WGP
         /// <summary>
         /// Angle in degrees.
         /// </summary>
-        public float Degree
+        public double Degree
         {
-            get => Radian * 180 / (float)Math.PI;
-            set => Radian = value * (float)Math.PI / 180;
+            get => Radian * 180 / Math.PI;
+            set => Radian = value * Math.PI / 180;
         }
 
         /// <summary>
         /// Angle in radians.
         /// </summary>
-        public float Radian { get; set; }
+        public double Radian { get; set; }
 
         #endregion Public Properties
 
@@ -62,14 +63,14 @@ namespace WGP
         /// </summary>
         /// <param name="degree">Value in degrees.</param>
         /// <returns>New Angle instance.</returns>
-        static public Angle FromDegrees(float degree) => new Angle() { Degree = degree };
+        static public Angle FromDegrees(double degree) => new Angle() { Degree = degree };
 
         /// <summary>
         /// Creates a new instance from a value in radians.
         /// </summary>
         /// <param name="radian">Value in radians.</param>
         /// <returns>New Angle instance.</returns>
-        static public Angle FromRadians(float radian) => new Angle() { Radian = radian };
+        static public Angle FromRadians(double radian) => new Angle() { Radian = radian };
 
         static public Angle operator -(Angle left, Angle right)
         {
@@ -91,27 +92,27 @@ namespace WGP
             return FromRadians(left.Radian % right.Radian);
         }
 
-        static public Angle operator *(Angle angle, float value)
+        static public Angle operator *(Angle angle, double value)
         {
             return FromRadians(angle.Radian * value);
         }
 
-        static public Angle operator *(float value, Angle angle)
+        static public Angle operator *(double value, Angle angle)
         {
             return FromRadians(angle.Radian * value);
         }
 
-        static public Angle operator /(Angle angle, float value)
+        static public Angle operator /(Angle angle, double value)
         {
             return FromRadians(angle.Radian / value);
         }
 
-        static public Angle operator /(float value, Angle angle)
+        static public Angle operator /(double value, Angle angle)
         {
             return FromRadians(value / angle.Radian);
         }
 
-        static public float operator /(Angle left, Angle right)
+        static public double operator /(Angle left, Angle right)
         {
             return left.Radian / right.Radian;
         }
@@ -156,13 +157,13 @@ namespace WGP
         /// Returns the cosine of the angle.
         /// </summary>
         /// <returns>Cosine.</returns>
-        public float Cos() => (float)Math.Cos(Radian);
+        public double Cos() => Math.Cos(Radian);
 
         /// <summary>
         /// Returns the hyperbolic cosine of the angle.
         /// </summary>
         /// <returns>Hyperbolic cosine.</returns>
-        public float Cosh() => (float)Math.Cosh(Radian);
+        public double Cosh() => Math.Cosh(Radian);
 
         public bool Equals(Angle other) => Radian.Equals(other.Radian);
 
@@ -173,7 +174,7 @@ namespace WGP
         /// </summary>
         /// <param name="length">The length of the vector. (Optional)</param>
         /// <returns>Generated vector.</returns>
-        public SFML.System.Vector2f GenerateVector(float length = 1) => RotateVector(new SFML.System.Vector2f(length, 0));
+        public Vector GenerateVector(double length = 1) => RotateVector(new Vector(length, 0));
 
         public override int GetHashCode() => Radian.GetHashCode();
 
@@ -186,11 +187,12 @@ namespace WGP
         /// Returns the rotated vector corresponding to the angle.
         /// </summary>
         /// <param name="vector">Vector to rotate.</param>
-        public SFML.System.Vector2f RotateVector(SFML.System.Vector2f vector)
+        public Vector RotateVector(Vector vector)
         {
-            SFML.Graphics.Transform tr = SFML.Graphics.Transform.Identity;
-            tr.Rotate(Degree);
-            return tr.TransformPoint(vector);
+            var a = vector.GetAngle();
+            a += this;
+            var l = vector.Length;
+            return new Vector(a.Cos() * l, a.Sin() * l);
         }
 
         /// <summary>
@@ -198,31 +200,31 @@ namespace WGP
         /// </summary>
         /// <param name="x">X component of the vector.</param>
         /// <param name="y">Y component of the vector.</param>
-        public SFML.System.Vector2f RotateVector(float x, float y) => RotateVector(new SFML.System.Vector2f(x, y));
+        public Vector RotateVector(double x, double y) => RotateVector(new Vector(x, y));
 
         /// <summary>
         /// Returns the sinus of the angle.
         /// </summary>
         /// <returns>Sinus.</returns>
-        public float Sin() => (float)Math.Sin(Radian);
+        public double Sin() => Math.Sin(Radian);
 
         /// <summary>
         /// Returns the hyperbolic sinus of the angle.
         /// </summary>
         /// <returns>Hyperbolic sinus.</returns>
-        public float Sinh() => (float)Math.Sinh(Radian);
+        public double Sinh() => Math.Sinh(Radian);
 
         /// <summary>
         /// Returns the tangent of the angle.
         /// </summary>
         /// <returns>Tangent.</returns>
-        public float Tan() => (float)Math.Tan(Radian);
+        public double Tan() => Math.Tan(Radian);
 
         /// <summary>
         /// Returns the hyperbolic tangent of the angle.
         /// </summary>
         /// <returns>Hyperbolic tangent.</returns>
-        public float Tanh() => (float)Math.Tanh(Radian);
+        public double Tanh() => Math.Tanh(Radian);
 
         public override string ToString() => ToString(null, System.Globalization.CultureInfo.CurrentCulture);
 

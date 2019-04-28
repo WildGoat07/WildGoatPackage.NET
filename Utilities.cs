@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SFML.Graphics;
-using SFML.System;
+using System.Windows;
 
 namespace WGP
 {
@@ -16,17 +15,12 @@ namespace WGP
         #region Public Methods
 
         /// <summary>
-        /// Creates a hitbox from a Floatrect.
+        /// Creates a FloatRect from multiple coords. The resulting box will be able to contain all
+        /// given coords.
         /// </summary>
-        /// <param name="rect">AABB.</param>
-        /// <returns>Hitbox.</returns>
-        static public RectangleHitbox CreateHitbox(FloatRect rect)
-        {
-            RectangleHitbox result = new RectangleHitbox();
-            result.Position = rect.TopLeft() + rect.Size() / 2;
-            result.HalfExtend = rect.Size() / 2;
-            return result;
-        }
+        /// <param name="pts">Points.</param>
+        /// <returns>Resulting FloatRect.</returns>
+        static public Rect CreateRect(params Point[] pts) => CreateRect(pts.AsEnumerable());
 
         /// <summary>
         /// Creates a FloatRect from multiple coords. The resulting box will be able to contain all
@@ -34,22 +28,14 @@ namespace WGP
         /// </summary>
         /// <param name="pts">Points.</param>
         /// <returns>Resulting FloatRect.</returns>
-        static public FloatRect CreateRect(params Vector2f[] pts) => CreateRect(pts.AsEnumerable());
-
-        /// <summary>
-        /// Creates a FloatRect from multiple coords. The resulting box will be able to contain all
-        /// given coords.
-        /// </summary>
-        /// <param name="pts">Points.</param>
-        /// <returns>Resulting FloatRect.</returns>
-        static public FloatRect CreateRect(IEnumerable<Vector2f> pts)
+        static public Rect CreateRect(IEnumerable<Point> pts)
         {
             if (pts == null)
                 throw new ArgumentNullException("pts");
             if (pts.Count() == 0)
                 throw new Exception("Too few vectors in the list.");
-            FloatRect result = new FloatRect();
-            Vector2f min = pts.First(), max = pts.First();
+            Rect result = new Rect();
+            Point min = pts.First(), max = pts.First();
             foreach (var item in pts)
             {
                 min.X = Min(min.X, item.X);
@@ -57,12 +43,23 @@ namespace WGP
                 max.X = Max(max.X, item.X);
                 max.Y = Max(max.Y, item.Y);
             }
-            result.Left = min.X;
-            result.Top = min.Y;
+            result.X = min.X;
+            result.Y = min.Y;
             result.Width = max.X - min.X;
             result.Height = max.Y - min.Y;
 
             return result;
+        }
+
+        /// <summary>
+        /// Returns the dot product of two vectors.
+        /// </summary>
+        /// <param name="vec1">First vector.</param>
+        /// <param name="vec2">Second vector.</param>
+        /// <returns>Dot product.</returns>
+        static public double DotProduct(Vector vec1, Vector vec2)
+        {
+            return vec1.X * vec2.X + vec1.Y * vec2.Y;
         }
 
         /// <summary>
@@ -104,47 +101,6 @@ namespace WGP
         public static T Interpolation<T>(float percent, T min, T max, bool capped = false)
         {
             return InterpolationD(percent, min, max, capped);
-        }
-
-        /// <summary>
-        /// Returns an interpolation.
-        /// </summary>
-        /// <param name="percent">Percent. Must be between [0,1].</param>
-        /// <param name="min">Minimal value.</param>
-        /// <param name="max">Maximal value.</param>
-        /// <param name="capped">True if the value must be capped.</param>
-        /// <returns>Interpolation.</returns>
-        public static Time Interpolation(float percent, Time min, Time max, bool capped = false)
-        {
-            if (capped)
-                return (percent * (max - min) + min).Capped(min, max);
-            else
-                return percent * (max - min) + min;
-        }
-
-        /// <summary>
-        /// Returns the biggest value.
-        /// </summary>
-        /// <param name="param">values.</param>
-        /// <returns>Maximum value.</returns>
-        static public Time Max(params Time[] param) => Max(param.AsEnumerable());
-
-        /// <summary>
-        /// Returns the biggest value.
-        /// </summary>
-        /// <param name="param">values.</param>
-        /// <returns>Maximum value.</returns>
-        static public Time Max(IEnumerable<Time> param)
-        {
-            if (param.Count() == 0)
-                return default;
-            Time maxValue = param.First();
-            foreach (var item in param)
-            {
-                if (maxValue < item)
-                    maxValue = item;
-            }
-            return maxValue;
         }
 
         /// <summary>
@@ -202,31 +158,6 @@ namespace WGP
         }
 
         /// <summary>
-        /// Returns the smallest value.
-        /// </summary>
-        /// <param name="param">values.</param>
-        /// <returns>Minimum value.</returns>
-        static public Time Min(params Time[] param) => Min(param.AsEnumerable());
-
-        /// <summary>
-        /// Returns the smallest value.
-        /// </summary>
-        /// <param name="param">values.</param>
-        /// <returns>Minimum value.</returns>
-        static public Time Min(IEnumerable<Time> param)
-        {
-            if (param.Count() == 0)
-                return default;
-            Time minValue = param.First();
-            foreach (var item in param)
-            {
-                if (minValue > item)
-                    minValue = item;
-            }
-            return minValue;
-        }
-
-        /// <summary>
         /// Returns a percentage.
         /// </summary>
         /// <param name="value">Reference value.</param>
@@ -237,22 +168,6 @@ namespace WGP
         public static float Percent<T>(T value, T min, T max, bool capped = true)
         {
             return PercentD(value, min, max, capped);
-        }
-
-        /// <summary>
-        /// Returns a percentage.
-        /// </summary>
-        /// <param name="value">Reference value.</param>
-        /// <param name="min">Minmal value.</param>
-        /// <param name="max">Maximal value.</param>
-        /// <param name="capped">True if the value must be capped.</param>
-        /// <returns>Percentage.</returns>
-        public static float Percent(Time value, Time min, Time max, bool capped = true)
-        {
-            if (capped)
-                return ((value.AsSeconds() - min.AsSeconds()) / (max.AsSeconds() - min.AsSeconds())).Capped(0, 1);
-            else
-                return (value.AsSeconds() - min.AsSeconds()) / (max.AsSeconds() - min.AsSeconds());
         }
 
         #endregion Public Methods

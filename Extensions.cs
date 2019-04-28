@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SFML.Graphics;
-using SFML.System;
+using System.Windows;
 
 namespace WGP
 {
@@ -58,48 +57,6 @@ namespace WGP
         static public Single Abs(this Single nb) => Math.Abs(nb);
 
         /// <summary>
-        /// Returns the bot value of the rect.
-        /// </summary>
-        /// <param name="rect">AABB.</param>
-        /// <returns>Bot of the rect.</returns>
-        static public float Bot(this FloatRect rect) => rect.Top + rect.Height;
-
-        /// <summary>
-        /// Returns the bot value of the rect.
-        /// </summary>
-        /// <param name="rect">AABB.</param>
-        /// <returns>Bot of the rect.</returns>
-        static public int Bot(this IntRect rect) => rect.Top + rect.Height;
-
-        /// <summary>
-        /// Returns the bottom left point of the rect.
-        /// </summary>
-        /// <param name="rect">AABB.</param>
-        /// <returns>Bottom left point.</returns>
-        static public Vector2f BotLeft(this FloatRect rect) => new Vector2f(rect.Left, rect.Top + rect.Height);
-
-        /// <summary>
-        /// Returns the bottom left point of the rect.
-        /// </summary>
-        /// <param name="rect">AABB.</param>
-        /// <returns>Bottom left point.</returns>
-        static public Vector2i BotLeft(this IntRect rect) => new Vector2i(rect.Left, rect.Top + rect.Height);
-
-        /// <summary>
-        /// Returns the bottom right point of the rect.
-        /// </summary>
-        /// <param name="rect">AABB.</param>
-        /// <returns>Bottom right point.</returns>
-        static public Vector2f BotRight(this FloatRect rect) => new Vector2f(rect.Left + rect.Width, rect.Top + rect.Height);
-
-        /// <summary>
-        /// Returns the bottom right point of the rect.
-        /// </summary>
-        /// <param name="rect">AABB.</param>
-        /// <returns>Bottom right point.</returns>
-        static public Vector2i BotRight(this IntRect rect) => new Vector2i(rect.Left + rect.Width, rect.Top + rect.Height);
-
-        /// <summary>
         /// Cap the value between a maximum and a minimum value.
         /// </summary>
         /// <typeparam name="T">Type of the variable. Must be comparable.</typeparam>
@@ -113,18 +70,6 @@ namespace WGP
         }
 
         /// <summary>
-        /// Cap the value between a maximum and a minimum value.
-        /// </summary>
-        /// <param name="value">Value to cap.</param>
-        /// <param name="min">Minimum value.</param>
-        /// <param name="max">Maximum value.</param>
-        /// <returns>Capped value.</returns>
-        static public Time Capped(this Time value, Time min, Time max)
-        {
-            return Utilities.Max(min, Utilities.Min(max, value));
-        }
-
-        /// <summary>
         /// Test the collision between two lines. Test also the collision if one or both of the lines
         /// are segments.
         /// </summary>
@@ -133,13 +78,15 @@ namespace WGP
         /// <returns>True if there is a collision.</returns>
         static public bool Collision(this Line line1, Line line2)
         {
-            if (line1.Direction.CrossProduct(line2.Direction) == 0 &&
-                (line2.Position - line1.Position).CrossProduct(line2.Direction) == 0)
+            if ((line1.Direction % Angle.Loop / 2) == (line2.Direction % Angle.Loop / 2) &&
+                Vector.CrossProduct((line2.Position - line1.Position), line2.Direction.GenerateVector()) == 0)
                 return false;
+            double t1 = Vector.CrossProduct((line2.Position - line1.Position), line2.Direction.GenerateVector()) /
+        Vector.CrossProduct(line1.Direction.GenerateVector(), line2.Direction.GenerateVector());
+            double t2 = Vector.CrossProduct((line2.Position - line1.Position), line1.Direction.GenerateVector()) /
+                Vector.CrossProduct(line1.Direction.GenerateVector(), line2.Direction.GenerateVector());
             if (line1 is Segment && line2 is Segment)
             {
-                float t1 = (line2.Position - line1.Position).CrossProduct(line2.Direction) / line1.Direction.CrossProduct(line2.Direction);
-                float t2 = (line2.Position - line1.Position).CrossProduct(line1.Direction) / line1.Direction.CrossProduct(line2.Direction);
                 if (t1.IsInRange(0f, ((Segment)line1).Length) && t2.IsInRange(0, ((Segment)line2).Length))
                     return true;
                 else
@@ -147,7 +94,6 @@ namespace WGP
             }
             else if (line1 is Segment)
             {
-                float t1 = (line2.Position - line1.Position).CrossProduct(line2.Direction) / line1.Direction.CrossProduct(line2.Direction);
                 if (t1.IsInRange(0f, ((Segment)line1).Length))
                     return true;
                 else
@@ -155,7 +101,6 @@ namespace WGP
             }
             else if (line2 is Segment)
             {
-                float t2 = (line2.Position - line1.Position).CrossProduct(line1.Direction) / line1.Direction.CrossProduct(line2.Direction);
                 if (t2.IsInRange(0f, ((Segment)line2).Length))
                     return true;
                 else
@@ -163,28 +108,6 @@ namespace WGP
             }
             else
                 return true;
-        }
-
-        /// <summary>
-        /// Returns the cross product of two vectors.
-        /// </summary>
-        /// <param name="vec1">First vector.</param>
-        /// <param name="vec2">Second vector.</param>
-        /// <returns>Cross product.</returns>
-        static public float CrossProduct(this Vector2f vec1, Vector2f vec2)
-        {
-            return vec1.X * vec2.Y - vec1.Y * vec2.X;
-        }
-
-        /// <summary>
-        /// Returns the dot product of two vectors.
-        /// </summary>
-        /// <param name="vec1">First vector.</param>
-        /// <param name="vec2">Second vector.</param>
-        /// <returns>Dot product.</returns>
-        static public float DotProduct(this Vector2f vec1, Vector2f vec2)
-        {
-            return vec1.X * vec2.X + vec1.Y * vec2.Y;
         }
 
         /// <summary>
@@ -204,19 +127,9 @@ namespace WGP
         /// </summary>
         /// <param name="vector">Vector.</param>
         /// <returns>Angle.</returns>
-        static public Angle GetAngle(this Vector2f vector)
+        static public Angle GetAngle(this Vector vector)
         {
-            return Angle.FromRadians((float)Math.Atan2(vector.Y, vector.X));
-        }
-
-        /// <summary>
-        /// Returns the length of a vector.
-        /// </summary>
-        /// <param name="vector">Vector.</param>
-        /// <returns>Length.</returns>
-        public static float GetLength(this Vector2f vector)
-        {
-            return (float)Math.Sqrt(LengthSquared(vector));
+            return Angle.FromRadians(Math.Atan2(vector.Y, vector.X));
         }
 
         /// <summary>
@@ -239,12 +152,12 @@ namespace WGP
         /// <param name="line2">Second line.</param>
         /// <returns>Intersection of the lines.</returns>
         /// <remarks>The returned value is set to default if there is no collision.</remarks>
-        static public Vector2f Intersection(this Line line1, Line line2)
+        static public Point Intersection(this Line line1, Line line2)
         {
-            if (line1.Direction.CrossProduct(line2.Direction) == 0 &&
-                (line2.Position - line1.Position).CrossProduct(line2.Direction) == 0)
+            if ((line1.Direction % Angle.Loop / 2) == (line2.Direction % Angle.Loop / 2))
                 return default;
-            float t = (line2.Position - line1.Position).CrossProduct(line2.Direction) / line1.Direction.CrossProduct(line2.Direction);
+            double t = Vector.CrossProduct((line2.Position - line1.Position), line2.Direction.GenerateVector()) /
+                Vector.CrossProduct(line1.Direction.GenerateVector(), line2.Direction.GenerateVector());
             return line1.GetPoint(t);
         }
 
@@ -264,20 +177,6 @@ namespace WGP
         }
 
         /// <summary>
-        /// Tests if <paramref name="value"/> is in the [ <paramref name="min"/> , <paramref
-        /// name="max"/>] range. <paramref name="min"/> and <paramref name="max"/> are included in
-        /// the range.
-        /// </summary>
-        /// <param name="value">Value to compare.</param>
-        /// <param name="min">Minimum value of the range.</param>
-        /// <param name="max">Maximum value of the range.</param>
-        /// <returns>True if <paramref name="value"/> is in the range.</returns>
-        static public bool IsInRange(this Time value, Time min, Time max)
-        {
-            return value >= min && value <= max;
-        }
-
-        /// <summary>
         /// Tests if <paramref name="value"/> is in the <paramref name="interval"/>.
         /// </summary>
         /// <typeparam name="T">Type of the variable. Must be comparable and equatable.</typeparam>
@@ -285,16 +184,6 @@ namespace WGP
         /// <param name="interval">Interval to be compared with.</param>
         /// <returns>True if <paramref name="value"/> is in the range.</returns>
         static public bool IsInRange<T>(this T value, Interval<T> interval) where T : IComparable, IEquatable<T> => interval.IsInRange(value);
-
-        /// <summary>
-        /// Returns the length squared of a vector.
-        /// </summary>
-        /// <param name="vector">Vector.</param>
-        /// <returns>Length squared.</returns>
-        public static float LengthSquared(this Vector2f vector)
-        {
-            return vector.X * vector.X + vector.Y * vector.Y;
-        }
 
         /// <summary>
         /// Returns a random float between two values.
@@ -309,59 +198,18 @@ namespace WGP
         }
 
         /// <summary>
-        /// Normalize a vector.
-        /// </summary>
-        /// <param name="vector">Vector to normalize.</param>
-        /// <returns>Normalized vector.</returns>
-        public static Vector2f Normalize(this Vector2f vector)
-        {
-            float l = vector.GetLength();
-            if (l == 0)
-                return default;
-            return vector / l;
-        }
-
-        /// <summary>
         /// Returns a vector with the Y axis set to 0.
         /// </summary>
         /// <param name="vec">Vector to extract the X axis.</param>
         /// <returns>The vector without the Y axis.</returns>
-        static public Vector2f OnlyX(this Vector2f vec) => new Vector2f(vec.X, 0);
-
-        /// <summary>
-        /// Returns a vector with the Y axis set to 0.
-        /// </summary>
-        /// <param name="vec">Vector to extract the X axis.</param>
-        /// <returns>The vector without the Y axis.</returns>
-        static public Vector2u OnlyX(this Vector2u vec) => new Vector2u(vec.X, 0);
-
-        /// <summary>
-        /// Returns a vector with the Y axis set to 0.
-        /// </summary>
-        /// <param name="vec">Vector to extract the X axis.</param>
-        /// <returns>The vector without the Y axis.</returns>
-        static public Vector2i OnlyX(this Vector2i vec) => new Vector2i(vec.X, 0);
+        static public Vector OnlyX(this Vector vec) => new Vector(vec.X, 0);
 
         /// <summary>
         /// Returns a vector with the X axis set to 0.
         /// </summary>
         /// <param name="vec">Vector to extract the Y axis.</param>
         /// <returns>The vector without the X axis.</returns>
-        static public Vector2f OnlyY(this Vector2f vec) => new Vector2f(0, vec.Y);
-
-        /// <summary>
-        /// Returns a vector with the X axis set to 0.
-        /// </summary>
-        /// <param name="vec">Vector to extract the Y axis.</param>
-        /// <returns>The vector without the X axis.</returns>
-        static public Vector2u OnlyY(this Vector2u vec) => new Vector2u(0, vec.Y);
-
-        /// <summary>
-        /// Returns a vector with the X axis set to 0.
-        /// </summary>
-        /// <param name="vec">Vector to extract the Y axis.</param>
-        /// <returns>The vector without the X axis.</returns>
-        static public Vector2i OnlyY(this Vector2i vec) => new Vector2i(0, vec.Y);
+        static public Vector OnlyY(this Vector vec) => new Vector(0, vec.Y);
 
         /// <summary>
         /// Reads a base type and returns it.
@@ -530,28 +378,13 @@ namespace WGP
         }
 
         /// <summary>
-        /// Returns the right value of the rect.
-        /// </summary>
-        /// <param name="rect">AABB.</param>
-        /// <returns>Right of the rect.</returns>
-        static public float Right(this FloatRect rect) => rect.Left + rect.Width;
-
-        /// <summary>
-        /// Returns the right value of the rect.
-        /// </summary>
-        /// <param name="rect">AABB.</param>
-        /// <returns>Right of the rect.</returns>
-        static public int Right(this IntRect rect) => rect.Left + rect.Width;
-
-        /// <summary>
         /// Sets the angle of the vector.
         /// </summary>
         /// <param name="vector">Vector.</param>
         /// <param name="angle">Angle of the vector to add.</param>
-        /// <returns>Angle.</returns>
-        static public Vector2f Rotate(this Vector2f vector, Angle angle)
+        static public void Rotate(ref this Vector vector, Angle angle)
         {
-            return angle.RotateVector(vector);
+            var tmp = angle.RotateVector(vector);
         }
 
         /// <summary>
@@ -559,10 +392,9 @@ namespace WGP
         /// </summary>
         /// <param name="vector">Vector.</param>
         /// <param name="angle">Angle of the vector.</param>
-        /// <returns>Angle.</returns>
-        static public Vector2f SetAngle(this Vector2f vector, Angle angle)
+        static public void SetAngle(ref this Vector vector, Angle angle)
         {
-            return angle.GenerateVector(vector.GetLength());
+            var tmp = angle.GenerateVector(vector.Length);
         }
 
         /// <summary>
@@ -570,87 +402,28 @@ namespace WGP
         /// </summary>
         /// <param name="vector">Vector.</param>
         /// <param name="length">Length of the vector.</param>
-        /// <returns>Length.</returns>
-        public static Vector2f SetLength(this Vector2f vector, float length)
+        public static void SetLength(ref this Vector vector, float length)
         {
-            return vector.GetAngle().GenerateVector(length);
+            var tmp = vector.GetAngle().GenerateVector(length);
         }
-
-        /// <summary>
-        /// Returns the size of the rect.
-        /// </summary>
-        /// <param name="rect">AABB.</param>
-        /// <returns>Size of the rect.</returns>
-        static public Vector2f Size(this FloatRect rect) => new Vector2f(rect.Width, rect.Height);
-
-        /// <summary>
-        /// Returns the size of the rect.
-        /// </summary>
-        /// <param name="rect">AABB.</param>
-        /// <returns>Size of the rect.</returns>
-        static public Vector2i Size(this IntRect rect) => new Vector2i(rect.Width, rect.Height);
 
         /// <summary>
         /// Returns the angle in a [0;2PI[ space.
         /// </summary>
         /// <param name="angle"></param>
-        /// <returns>Angle in [0;2PI[ space.</returns>
-        static public Angle To0_2PI(this Angle angle) => angle % Angle.Loop;
+        static public void To0_2PI(ref this Angle angle) => angle.Radian %= Math.PI * 2;
 
         /// <summary>
         /// Returns the angle in a [-PI;+PI[ space.
         /// </summary>
         /// <param name="angle"></param>
-        /// <returns>Angle in [-PI;+PI[ space.</returns>
-        static public Angle ToMinusPI_PI(this Angle angle)
+        static public void ToMinusPI_PI(ref this Angle angle)
         {
-            angle = angle.To0_2PI();
-            if (angle >= Angle.Loop / 2)
-                angle -= Angle.Loop;
-            return angle;
+            var rad = angle.Radian %= Math.PI * 2;
+            if (rad >= Math.PI)
+                rad -= Math.PI * 2;
+            angle.Radian = rad;
         }
-
-        /// <summary>
-        /// Returns the top left point of the rect.
-        /// </summary>
-        /// <param name="rect">AABB.</param>
-        /// <returns>Top left point.</returns>
-        static public Vector2f TopLeft(this FloatRect rect) => new Vector2f(rect.Left, rect.Top);
-
-        /// <summary>
-        /// Returns the top left point of the rect.
-        /// </summary>
-        /// <param name="rect">AABB.</param>
-        /// <returns>Top left point.</returns>
-        static public Vector2i TopLeft(this IntRect rect) => new Vector2i(rect.Left, rect.Top);
-
-        /// <summary>
-        /// Returns the top right point of the rect.
-        /// </summary>
-        /// <param name="rect">AABB.</param>
-        /// <returns>Top right point.</returns>
-        static public Vector2f TopRight(this FloatRect rect) => new Vector2f(rect.Left + rect.Width, rect.Top);
-
-        /// <summary>
-        /// Returns the top right point of the rect.
-        /// </summary>
-        /// <param name="rect">AABB.</param>
-        /// <returns>Top right point.</returns>
-        static public Vector2i TopRight(this IntRect rect) => new Vector2i(rect.Left + rect.Width, rect.Top);
-
-        /// <summary>
-        /// Converts the TimeSpan to a SFML Time.
-        /// </summary>
-        /// <param name="t">TimeSpan to converts.</param>
-        /// <returns>The resulting Time.</returns>
-        static public Time ToSFML(this TimeSpan t) => Time.FromMicroseconds(t.Ticks / 10);
-
-        /// <summary>
-        /// Converts the SFML Time to a TimeSpan.
-        /// </summary>
-        /// <param name="t">Time to converts.</param>
-        /// <returns>The resulting TimeSpan.</returns>
-        static public TimeSpan ToSystem(this Time t) => TimeSpan.FromTicks(t.AsMicroseconds() * 10);
 
         /// <summary>
         /// Tries to find the value.

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SFML.System;
+using System.Windows;
 
 namespace WGP
 {
@@ -12,17 +12,15 @@ namespace WGP
     /// </summary>
     public class Segment : Line
     {
-        /// <summary>
-        /// Length of the segment.
-        /// </summary>
-        public float Length { get; set; }
+        #region Public Constructors
+
         /// <summary>
         /// Constructor.
         /// </summary>
         public Segment() : base()
         {
-
         }
+
         /// <summary>
         /// Copy constructor.
         /// </summary>
@@ -31,15 +29,41 @@ namespace WGP
         {
             Length = copy.Length;
         }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="pt">First point of the segment.</param>
+        /// <param name="angle">Last point of the segment.</param>
+        /// <param name="length">Length of the segment.</param>
+        public Segment(Point pt, Angle angle, double length) : base(pt, angle)
+        {
+            Length = length;
+        }
+
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="pt1">First point of the segment.</param>
         /// <param name="pt2">Last point of the segment.</param>
-        public Segment(Vector2f pt1, Vector2f pt2) : base(pt1, pt2)
+        public Segment(Point pt1, Point pt2) : base(pt1, pt2)
         {
-            Length = (pt1 - pt2).GetLength();
+            Length = (pt2 - pt1).Length;
         }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        /// <summary>
+        /// Length of the segment.
+        /// </summary>
+        public double Length { get; set; }
+
+        #endregion Public Properties
+
+        #region Public Methods
+
         /// <summary>
         /// Creates a line from the segment.
         /// </summary>
@@ -48,5 +72,7 @@ namespace WGP
         {
             return new Line(Position, Direction);
         }
+
+        #endregion Public Methods
     }
 }
