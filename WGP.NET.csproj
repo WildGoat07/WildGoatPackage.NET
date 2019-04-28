@@ -94,6 +94,7 @@
     <Compile Include="CircleHitbox.cs" />
     <Compile Include="CustomHitbox.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="FormatOverrider.cs" />
     <Compile Include="HSVColor.cs" />
     <Compile Include="IFunction.cs" />
     <Compile Include="Hitbox.cs" />
