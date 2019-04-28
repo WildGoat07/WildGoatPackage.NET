@@ -97,6 +97,7 @@
     <Compile Include="HSVColor.cs" />
     <Compile Include="IFunction.cs" />
     <Compile Include="Hitbox.cs" />
+    <Compile Include="Interval.cs" />
     <Compile Include="Line.cs" />
     <Compile Include="LinearFunction.cs" />
     <Compile Include="Channels\MasterChannel.cs" />

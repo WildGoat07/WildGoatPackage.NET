@@ -275,6 +275,15 @@ namespace WGP
         }
 
         /// <summary>
+        /// Tests if <paramref name="value"/> is in the <paramref name="interval"/>.
+        /// </summary>
+        /// <typeparam name="T">Type of the variable. Must be comparable and equatable.</typeparam>
+        /// <param name="value">Value to compare.</param>
+        /// <param name="interval">Interval to be compared with.</param>
+        /// <returns>True if <paramref name="value"/> is in the range.</returns>
+        static public bool IsInRange<T>(this T value, Interval<T> interval) where T : IComparable, IEquatable<T> => interval.IsInRange(value);
+
+        /// <summary>
         /// Returns the length squared of a vector.
         /// </summary>
         /// <param name="vector">Vector.</param>
