@@ -14,40 +14,16 @@ namespace WGP
     /// </summary>
     public struct HSVColor : IEquatable<HSVColor>
     {
+        #region Private Fields
+
         private float hue;
         private float saturation;
         private float value;
-        /// <summary>
-        /// Hue of the color.
-        /// </summary>
-        /// <value>Must be between [0,360[</value>
-        public float H
-        {
-            get => hue;
-            set => hue = ((value % 360) + 360) % 360;
-        }
-        /// <summary>
-        /// Saturation of the color.
-        /// </summary>
-        /// <value>Must be between [0,1]</value>
-        public float S
-        {
-            get => saturation;
-            set => saturation = Utilities.Max(0, Utilities.Min(1, value));
-        }
-        /// <summary>
-        /// Value of the color.
-        /// </summary>
-        /// <value>Must be between [0,1]</value>
-        public float V
-        {
-            get => value;
-            set => this.value = Utilities.Max(0, Utilities.Min(1, value));
-        }
-        /// <summary>
-        /// Alpha channel of the color.
-        /// </summary>
-        public byte A { get; set; }
+
+        #endregion Private Fields
+
+        #region Public Constructors
+
         /// <summary>
         /// Copy Constructor.
         /// </summary>
@@ -59,6 +35,7 @@ namespace WGP
             value = copy.value;
             A = copy.A;
         }
+
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -68,11 +45,12 @@ namespace WGP
         /// <param name="a">Alpha.</param>
         public HSVColor(float h, float s, float v, byte a = 255)
         {
-            hue = h;
-            saturation = s;
-            value = v;
+            hue = ((h % 360) + 360) % 360;
+            saturation = Utilities.Max(0, Utilities.Min(1, s));
+            value = Utilities.Max(0, Utilities.Min(1, v));
             A = a;
         }
+
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -115,6 +93,75 @@ namespace WGP
             }
             A = color.A;
         }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        /// <summary>
+        /// Alpha channel of the color.
+        /// </summary>
+        public byte A { get; set; }
+
+        /// <summary>
+        /// Hue of the color.
+        /// </summary>
+        /// <value>Must be between [0,360[</value>
+        public float H
+        {
+            get => hue;
+            set => hue = ((value % 360) + 360) % 360;
+        }
+
+        /// <summary>
+        /// Saturation of the color.
+        /// </summary>
+        /// <value>Must be between [0,1]</value>
+        public float S
+        {
+            get => saturation;
+            set => saturation = Utilities.Max(0, Utilities.Min(1, value));
+        }
+
+        /// <summary>
+        /// Value of the color.
+        /// </summary>
+        /// <value>Must be between [0,1]</value>
+        public float V
+        {
+            get => value;
+            set => this.value = Utilities.Max(0, Utilities.Min(1, value));
+        }
+
+        #endregion Public Properties
+
+        #region Public Methods
+
+        public static implicit operator Color(HSVColor color)
+        {
+            return color.ToRgb();
+        }
+
+        public static implicit operator HSVColor(Color color)
+        {
+            return new HSVColor(color);
+        }
+
+        public bool Equals(HSVColor other)
+        {
+            return (H == other.H && S == other.S && V == other.V && A == other.A);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals((HSVColor)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return (int)(H + S * 215 + V * 654685 + A * 65216851);
+        }
+
         /// <summary>
         /// Convert the color to the RGB format.
         /// </summary>
@@ -141,33 +188,38 @@ namespace WGP
             q = V * (1f - S * ff);
             t = V * (1f - S * (1f - ff));
 
-            switch(i)
+            switch (i)
             {
                 case 0:
                     result.R = (byte)(V * 255);
                     result.G = (byte)(t * 255);
                     result.B = (byte)(p * 255);
                     break;
+
                 case 1:
                     result.R = (byte)(q * 255);
                     result.G = (byte)(V * 255);
                     result.B = (byte)(p * 255);
                     break;
+
                 case 2:
                     result.R = (byte)(p * 255);
                     result.G = (byte)(V * 255);
                     result.B = (byte)(t * 255);
                     break;
+
                 case 3:
                     result.R = (byte)(p * 255);
                     result.G = (byte)(q * 255);
                     result.B = (byte)(V * 255);
                     break;
+
                 case 4:
                     result.R = (byte)(t * 255);
                     result.G = (byte)(p * 255);
                     result.B = (byte)(V * 255);
                     break;
+
                 case 5:
                     result.R = (byte)(V * 255);
                     result.G = (byte)(p * 255);
@@ -176,32 +228,12 @@ namespace WGP
             }
             return result;
         }
-        public static implicit operator HSVColor(Color color)
-        {
-            return new HSVColor(color);
-        }
-        public static implicit operator Color(HSVColor color)
-        {
-            return color.ToRgb();
-        }
-        public bool Equals(HSVColor other)
-        {
-            return (H == other.H && S == other.S && V == other.V && A == other.A);
-        }
-
-        public override bool Equals(object obj)
-        {
-            return Equals((HSVColor)obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return (int)(H + S * 215 + V * 654685 + A * 65216851);
-        }
 
         public override string ToString()
         {
             return "{ [H:" + H + "] , [S:" + S + "] , [V:" + V + "] , [A:" + A + "] }";
         }
+
+        #endregion Public Methods
     }
 }
