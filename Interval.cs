@@ -50,30 +50,30 @@ namespace WGP
         /// <summary>
         /// Constructor. Generate an interval from the given values.
         /// </summary>
-        /// <param name="value1">Value 1.</param>
+        /// <param name="value">First value.</param>
         /// <param name="values">Optionnal values.</param>
-        public Interval(T value1, params T[] values)
+        public Interval(T value, params T[] values)
         {
             Options = IncludingOptions.INCLUDE_BOTH;
             var mi = Utilities.Min(values);
             var ma = Utilities.Max(values);
-            Minimum = Utilities.Min(value1, mi);
-            Maximum = Utilities.Max(value1, ma);
+            Minimum = Utilities.Min(value, mi);
+            Maximum = Utilities.Max(value, ma);
         }
 
         /// <summary>
         /// Constructor. Generate an interval from the given values and the given including option.
         /// </summary>
         /// <param name="options">How the borders are managed.</param>
-        /// <param name="value1">Value 1.</param>
+        /// <param name="value">First value.</param>
         /// <param name="values">Optionnal values.</param>
-        public Interval(IncludingOptions options, T value1, params T[] values)
+        public Interval(IncludingOptions options, T value, params T[] values)
         {
             Options = options;
             var mi = Utilities.Min(values);
             var ma = Utilities.Max(values);
-            Minimum = Utilities.Min(value1, mi);
-            Maximum = Utilities.Max(value1, ma);
+            Minimum = Utilities.Min(value, mi);
+            Maximum = Utilities.Max(value, ma);
         }
 
         public Interval(SerializationInfo info, StreamingContext context)
@@ -165,7 +165,7 @@ namespace WGP
                 sb.Append("]");
             sb.Append(Minimum.ToString());
             sb.Append(";");
-            sb.Append(Minimum.ToString());
+            sb.Append(Maximum.ToString());
             if ((Options & IncludingOptions.INCLUDE_MAXIMUM) == IncludingOptions.INCLUDE_MAXIMUM)
                 sb.Append("]");
             else
