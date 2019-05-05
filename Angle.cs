@@ -14,16 +14,29 @@ namespace WGP
     [Serializable]
     public struct Angle : IComparable, IComparable<Angle>, IEquatable<Angle>, IFormattable, ISerializable, ICloneable
     {
+        #region Private Fields
+
+        private double _degree;
+
+        private double _radian;
+
+        #endregion Private Fields
+
         #region Public Constructors
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        public Angle(Angle other) => Radian = other.Radian;
+        public Angle(Angle other)
+        {
+            _radian = other._radian;
+            _degree = other._degree;
+        }
 
         public Angle(SerializationInfo info, StreamingContext context)
         {
-            Radian = info.GetSingle("Radians");
+            _radian = info.GetSingle("Radian");
+            _degree = info.GetSingle("Degree");
         }
 
         #endregion Public Constructors
@@ -33,7 +46,7 @@ namespace WGP
         /// <summary>
         /// Angle corresponing to 360 degrees or 2PI radians.
         /// </summary>
-        static public Angle Loop => FromRadians(2 * Math.PI);
+        static public Angle Loop => FromDegrees(360);
 
         /// <summary>
         /// Angle corresponing to 0 degrees or 0 radians.
@@ -45,14 +58,26 @@ namespace WGP
         /// </summary>
         public double Degree
         {
-            get => Radian * 180 / Math.PI;
-            set => Radian = value * Math.PI / 180;
+            get => _degree;
+            set
+            {
+                _degree = value;
+                LinkToRadians();
+            }
         }
 
         /// <summary>
         /// Angle in radians.
         /// </summary>
-        public double Radian { get; set; }
+        public double Radian
+        {
+            get => _radian;
+            set
+            {
+                _radian = value;
+                LinkToDegrees();
+            }
+        }
 
         #endregion Public Properties
 
@@ -72,55 +97,62 @@ namespace WGP
         /// <returns>New Angle instance.</returns>
         static public Angle FromRadians(double radian) => new Angle() { Radian = radian };
 
-        static public Angle operator -(Angle left, Angle right)
+        static public Angle operator -(Angle left, Angle right) => new Angle
         {
-            return FromRadians(left.Radian - right.Radian);
-        }
+            _radian = left._radian - right._radian,
+            _degree = left._degree - right._degree
+        };
 
-        static public Angle operator -(Angle angle)
+        static public Angle operator -(Angle angle) => new Angle
         {
-            return FromRadians(-angle.Radian);
-        }
+            _radian = -angle._radian,
+            _degree = -angle._degree
+        };
 
         static public bool operator !=(Angle left, Angle right)
         {
             return !left.Equals(right);
         }
 
-        static public Angle operator %(Angle left, Angle right)
+        static public Angle operator %(Angle left, Angle right) => new Angle
         {
-            return FromRadians(left.Radian % right.Radian);
-        }
+            _radian = left._radian % right._radian,
+            _degree = left._degree % right._degree
+        };
 
-        static public Angle operator *(Angle angle, double value)
+        static public Angle operator *(Angle angle, double value) => new Angle
         {
-            return FromRadians(angle.Radian * value);
-        }
+            _radian = angle._radian * value,
+            _degree = angle._degree * value
+        };
 
-        static public Angle operator *(double value, Angle angle)
+        static public Angle operator *(double value, Angle angle) => new Angle
         {
-            return FromRadians(angle.Radian * value);
-        }
+            _radian = angle._radian * value,
+            _degree = angle._degree * value
+        };
 
-        static public Angle operator /(Angle angle, double value)
+        static public Angle operator /(Angle angle, double value) => new Angle
         {
-            return FromRadians(angle.Radian / value);
-        }
-
-        static public Angle operator /(double value, Angle angle)
-        {
-            return FromRadians(value / angle.Radian);
-        }
+            _radian = angle._radian / value,
+            _degree = angle._degree / value
+        };
 
         static public double operator /(Angle left, Angle right)
         {
-            return left.Radian / right.Radian;
+            var perc1 = left._radian / right._radian;
+            var perc2 = left._degree / right._degree;
+            if ((perc1 - Math.Truncate(perc1)).ToString().Length > (perc2 - Math.Truncate(perc2)).ToString().Length)
+                return perc2;
+            else
+                return perc1;
         }
 
-        static public Angle operator +(Angle left, Angle right)
+        static public Angle operator +(Angle left, Angle right) => new Angle
         {
-            return FromRadians(left.Radian + right.Radian);
-        }
+            _radian = left._radian + right._radian,
+            _degree = left._degree + right._degree
+        };
 
         static public bool operator <(Angle left, Angle right)
         {
@@ -151,7 +183,14 @@ namespace WGP
 
         public int CompareTo(object obj) => CompareTo((Angle)obj);
 
-        public int CompareTo(Angle other) => Radian.CompareTo(other.Radian);
+        public int CompareTo(Angle other)
+        {
+            var res1 = _radian.CompareTo(other._radian);
+            var res2 = _degree.CompareTo(other._degree);
+            if (res2 == 0)
+                return res2;
+            return res1;
+        }
 
         /// <summary>
         /// Returns the cosine of the angle.
@@ -165,9 +204,9 @@ namespace WGP
         /// <returns>Hyperbolic cosine.</returns>
         public double Cosh() => Math.Cosh(Radian);
 
-        public bool Equals(Angle other) => Radian.Equals(other.Radian);
+        public bool Equals(Angle other) => CompareTo(other) == 0;
 
-        public override bool Equals(object obj) => Radian.Equals(((Angle)obj).Radian);
+        public override bool Equals(object obj) => Equals((Angle)obj);
 
         /// <summary>
         /// Generates a vector based on the angle.
@@ -180,7 +219,8 @@ namespace WGP
 
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("Radians", Radian);
+            info.AddValue("Radian", _radian);
+            info.AddValue("Degree", _degree);
         }
 
         /// <summary>
@@ -247,5 +287,13 @@ namespace WGP
         }
 
         #endregion Public Methods
+
+        #region Private Methods
+
+        private void LinkToDegrees() => _degree = _radian / Math.PI * 180;
+
+        private void LinkToRadians() => _radian = _degree * Math.PI / 180;
+
+        #endregion Private Methods
     }
 }

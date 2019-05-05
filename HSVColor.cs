@@ -43,9 +43,9 @@ namespace WGP
         /// <param name="a">Alpha.</param>
         public HSVColor(float h, float s, float v, byte a = 255)
         {
-            hue = h;
-            saturation = s;
-            value = v;
+            hue = ((h % 360) + 360) % 360;
+            saturation = ((s % 360) + 360) % 360;
+            value = ((v % 360) + 360) % 360;
             A = a;
         }
 
@@ -99,6 +99,7 @@ namespace WGP
         /// <summary>
         /// Alpha channel of the color.
         /// </summary>
+        /// <value>Must be between [0,255]</value>
         public byte A { get; set; }
 
         /// <summary>

@@ -165,7 +165,7 @@ namespace WGP
                 sb.Append("]");
             sb.Append(Minimum.ToString());
             sb.Append(";");
-            sb.Append(Minimum.ToString());
+            sb.Append(Maximum.ToString());
             if ((Options & IncludingOptions.INCLUDE_MAXIMUM) == IncludingOptions.INCLUDE_MAXIMUM)
                 sb.Append("]");
             else
